@@ -107,7 +107,7 @@ GO
 
 IF (NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'elements_stats'))
 BEGIN
-	CREATE TABLE [dbo].[element_stats](
+	CREATE TABLE [dbo].[elements_stats](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
 		[ElementId] [int] NOT NULL,
 		[Gameweek] [int] NOT NULL,

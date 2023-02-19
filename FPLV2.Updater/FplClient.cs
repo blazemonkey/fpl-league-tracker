@@ -35,7 +35,10 @@ public class FplClient
         if (result?.Results?.HasNext == true)
             await GetLeagueStandings(leagueId, ++page, players);
 
-        result.Results.Players = players.ToArray();
+        if (result.Results == null)
+            result.Results = new PlayerResults();
+
+        result.Results.Players = players?.ToArray();
         return result;
     }
 
