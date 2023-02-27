@@ -29,7 +29,7 @@ public abstract class UpdaterTests : UnitTests
     /// <typeparam name="T">The generic type which is a subclass of BaseApi</typeparam>
     /// <param name="parameters">Parameters that are used to mock the HttpMessageHandler responses</param>
     /// <returns>A task</returns>
-    protected async Task ExecuteApi<T>(params MockHttpParameter[] parameters) where T : BaseApi
+    protected async Task<bool> ExecuteApi<T>(params MockHttpParameter[] parameters) where T : BaseApi
     {
         var mockHttpClientFactory = GetMockHttpClientFactory(parameters);
         var httpClient = mockHttpClientFactory.Object.CreateClient();
@@ -37,7 +37,7 @@ public abstract class UpdaterTests : UnitTests
 
         var api = (T)Activator.CreateInstance(typeof(T), fplClient, UnitOfWork);
         var success = await api.Execute();
-        Assert.IsTrue(success);
+        return success;
     }
 
     /// <summary>

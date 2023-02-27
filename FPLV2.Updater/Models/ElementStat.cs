@@ -101,7 +101,7 @@ public class Stats
             Saves = stats.Saves,
             Threat = stats.Threat,
             TotalPoints = stats.TotalPoints,
-            YellowCards = stats.YellowCards,
+            YellowCards = stats.YellowCards            
         };
     }
 }

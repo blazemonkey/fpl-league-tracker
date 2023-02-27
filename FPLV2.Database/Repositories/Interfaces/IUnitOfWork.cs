@@ -9,6 +9,7 @@
         public IPlayerRepository Players { get; }
         public IPointsRepository Points { get; }
         public ISeasonRepository Seasons { get; }
+        public IStatsRepository Stats { get; }
         public ITeamRepository Teams { get; }
     }
 }

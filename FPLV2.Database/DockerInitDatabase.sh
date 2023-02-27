@@ -19,5 +19,6 @@ echo "Creating Tables"
 /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $1 -d $2 -i CreateTables.sql
 echo "Creating Stored Procedures"
 /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $1 -d $2 -i CreateStoredProcedures.sql
-
+echo "Insert Initial Data"
+/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $1 -d $2 -i InitialData.sql
 sleep infinity

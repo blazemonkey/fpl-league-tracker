@@ -10,12 +10,16 @@
 
   <ItemGroup>
     <None Remove="SampleData\bootstrap-static.json" />
+    <None Remove="SampleData\history.json" />
+    <None Remove="SampleData\live.json" />
     <None Remove="SampleData\picks.json" />
     <None Remove="SampleData\standings.json" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="SampleData\bootstrap-static.json" />
+    <EmbeddedResource Include="SampleData\history.json" />
+    <EmbeddedResource Include="SampleData\live.json" />
     <EmbeddedResource Include="SampleData\picks.json" />
     <EmbeddedResource Include="SampleData\standings.json" />
   </ItemGroup>

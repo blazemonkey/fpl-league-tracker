@@ -57,6 +57,17 @@ public class StandingsTests : UpdaterTests
     }
 
     [TestMethod]
+    public async Task NoSeasonIdSetTest()
+    {
+        var leagueId = 124141;
+        BaseApi.SeasonId = 0;
+
+        var json = GetLiveDataJson();
+        var success = await ExecuteApi<StandingsApi>(new Models.MockHttpParameter() { RequestUrl = string.Format(RequestUrl, leagueId, 1), ResponseContent = json });
+        Assert.IsFalse(success);
+    }
+    
+    [TestMethod]
     public async Task LeagueUpdateTest()
     {
         var leagueId = 124141;

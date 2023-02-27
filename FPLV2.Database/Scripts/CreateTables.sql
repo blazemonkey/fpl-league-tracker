@@ -193,3 +193,21 @@ BEGIN
 	ALTER TABLE [dbo].[Points] CHECK CONSTRAINT [FK_Points_Players_PlayerId]
 END
 GO
+
+IF (NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'stats'))
+BEGIN
+CREATE TABLE [dbo].[stats](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Type] [int] NOT NULL,
+	[Name] [nvarchar](max) NULL,
+	[Description] [nvarchar](max) NULL,
+	[StoredProcedureName] [nvarchar](max) NULL,
+	[DisplayOrder] [int] NOT NULL,
+	[Active] [bit] NOT NULL,
+ CONSTRAINT [PK_Stats] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+GO

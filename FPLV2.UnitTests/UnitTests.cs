@@ -57,6 +57,7 @@ namespace FPLV2.UnitTests
             UnitOfWork = GetUnitOfWork();
 
             await UnitOfWork.Leagues.DeleteAll();
+            await UnitOfWork.ElementStats.DeleteAll();
             await UnitOfWork.Elements.DeleteAll();
             await UnitOfWork.Teams.DeleteAll();
             await UnitOfWork.Seasons.DeleteAll();
@@ -109,7 +110,7 @@ namespace FPLV2.UnitTests
             return (UnitOfWork)unitOfWork;
         }
 
-        private static string GetScriptsDir()
+        protected static string GetScriptsDir()
         {
             var path = AppDomain.CurrentDomain.BaseDirectory;
             path = path.Substring(0, path.LastIndexOf("FPLV2.UnitTests"));
@@ -167,6 +168,10 @@ namespace FPLV2.UnitTests
                 var sp = File.ReadAllText(spFile);
                 text.AppendLine(sp);
             }
+
+            sql = Path.Combine(dir, "InitialData.sql");
+            var initialData = File.ReadAllText(sql);
+            text.AppendLine(initialData);
 
             using var conn = new SqlConnection(GetMasterConnectionString());
             conn.Open();

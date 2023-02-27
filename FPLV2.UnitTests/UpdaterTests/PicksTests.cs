@@ -73,6 +73,109 @@ public class PicksTests : UpdaterTests
     }
 
     [TestMethod]
+    public async Task NoSeasonIdSetTest()
+    {
+        var json = $$"""
+      {
+      "active_chip": null,
+      "automatic_subs": [
+
+      ],
+      "entry_history": {
+        "event": 1,
+        "points": 59,
+        "total_points": 59,
+        "rank": 3699295,
+        "rank_sort": 3739127,
+        "overall_rank": 3699292,
+        "bank": 0,
+        "value": 1000,
+        "event_transfers": 0,
+        "event_transfers_cost": 0,
+        "points_on_bench": 8
+      },
+      "picks": [
+        {
+          "element": 113,
+          "position": 1,
+          "multiplier": 1,
+          "is_captain": false,
+          "is_vice_captain": false
+        }
+      ]
+    }
+    """;
+
+        // insert league used in real sample data
+        var seasonId = await UnitOfWork.Seasons.Insert(new Database.Models.Season() { Year = "2022/23" });
+        BaseApi.SeasonId = 0; // have to set it to 0 because other tests will set this
+        BaseApi.CurrentGameweek = 1;
+        var entryId = 1234;
+
+        // insert a fake team to reference for teamid
+        var teamId = await UnitOfWork.Teams.Insert(new Database.Models.Team() { TeamId = 1, SeasonId = seasonId });
+
+        // insert the elements that are being referenced
+        await UnitOfWork.Elements.Insert(new Database.Models.Element() { ElementId = 113, TeamId = teamId });
+
+        var success = await ExecuteApi<PicksApi>(new Models.MockHttpParameter() { RequestUrl = string.Format(RequestUrl, entryId, 1), ResponseContent = json });
+        Assert.IsFalse(success);
+    }
+
+    [TestMethod]
+    public async Task NoCurrentGameweekSetTest()
+    {
+        var json = $$"""
+      {
+      "active_chip": null,
+      "automatic_subs": [
+
+      ],
+      "entry_history": {
+        "event": 1,
+        "points": 59,
+        "total_points": 59,
+        "rank": 3699295,
+        "rank_sort": 3739127,
+        "overall_rank": 3699292,
+        "bank": 0,
+        "value": 1000,
+        "event_transfers": 0,
+        "event_transfers_cost": 0,
+        "points_on_bench": 8
+      },
+      "picks": [
+        {
+          "element": 113,
+          "position": 1,
+          "multiplier": 1,
+          "is_captain": false,
+          "is_vice_captain": false
+        }
+      ]
+    }
+    """;
+
+        var leagueId = 124141;
+
+        // insert league used in real sample data
+        var seasonId = await UnitOfWork.Seasons.Insert(new Database.Models.Season() { Year = "2022/23" });
+        BaseApi.SeasonId = seasonId;
+        BaseApi.CurrentGameweek = 0; // have to set it to 0 because other tests will set this
+        var newLeagueId = await UnitOfWork.Leagues.Insert(new Database.Models.League() { LeagueId = leagueId, SeasonId = seasonId, Name = "PSL" });
+        var entryId = 1234;
+
+        // insert a fake team to reference for teamid
+        var teamId = await UnitOfWork.Teams.Insert(new Database.Models.Team() { TeamId = 1, SeasonId = seasonId });
+
+        // insert the elements that are being referenced
+        await UnitOfWork.Elements.Insert(new Database.Models.Element() { ElementId = 113, TeamId = teamId });
+
+        var success = await ExecuteApi<PicksApi>(new Models.MockHttpParameter() { RequestUrl = string.Format(RequestUrl, entryId, 1), ResponseContent = json });
+        Assert.IsFalse(success);
+    }
+
+    [TestMethod]
     public async Task PickNewTest()
     {
         var json = $$"""
@@ -896,5 +999,4 @@ public class PicksTests : UpdaterTests
         Assert.AreEqual(BaseApi.CurrentGameweek, dbPick.Gameweek);
         Assert.AreEqual(dbElements.FirstOrDefault(x => x.ElementId == pick.Element)?.Id ?? 0, dbPick.ElementId);
     }
-
 }
