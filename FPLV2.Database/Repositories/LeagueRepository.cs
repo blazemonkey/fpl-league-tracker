@@ -27,14 +27,17 @@ public class LeagueRepository : BaseRepository, ILeagueRepository
 
     public async Task DeleteAll()
     {
-        var sql = "delete from leagues";
+        var sql = "delete from players_in_leagues";
         using var conn = await OpenConnection();
+        await conn.ExecuteAsync(sql);
+
+        sql = "delete from leagues";
         await conn.ExecuteAsync(sql);
     }
 
     public async Task<int> Insert(League league)
     {
-        var sql = "insert into leagues (leagueId, seasonId, name) output inserted.id values (@LeagueId, @SeasonId, @Name)";
+        var sql = "insert into leagues (leagueId, seasonId, name, startevent) output inserted.id values (@LeagueId, @SeasonId, @Name, @StartEvent)";
         using var conn = await OpenConnection();
         var result = await conn.ExecuteScalarAsync<int>(sql, league);
         return result;
@@ -42,7 +45,7 @@ public class LeagueRepository : BaseRepository, ILeagueRepository
 
     public async Task<bool> Update(League league)
     {
-        var sql = "update leagues set leagueid = @LeagueId, seasonid = @SeasonId, name = @Name where id = @Id";
+        var sql = "update leagues set leagueid = @LeagueId, seasonid = @SeasonId, name = @Name, startevent = @StartEvent where id = @Id";
         using var conn = await OpenConnection();
         var result = await conn.ExecuteAsync(sql, league);
         var success = result > 0;

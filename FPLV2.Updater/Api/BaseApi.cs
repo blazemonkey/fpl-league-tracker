@@ -56,20 +56,15 @@ public abstract class BaseApi
     /// <returns>A task</returns>
     public async Task<bool> Execute()
     {
-        var stopwatch = new Stopwatch();
         try
         {
-            stopwatch.Start();
             await Get();
             return true;
         }
         catch (Exception ex)
         {
+            await UnitOfWork.Logs.LogError(ex.ToString());
             return false;
-        }
-        finally
-        {
-            stopwatch.Stop();
         }
     }
 }

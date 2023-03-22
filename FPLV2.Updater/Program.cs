@@ -1,6 +1,7 @@
 using FPLV2.Database.Repositories;
 using FPLV2.Database.Repositories.Interfaces;
 using FPLV2.Updater;
+using FPLV2.Updater.Handlers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,9 +27,10 @@ var host = new HostBuilder()
         }
 
         services.AddTransient<IUnitOfWork, UnitOfWork>();
+        services.AddTransient<LoggingHandler>();
 
         var url = config.GetValue<string>("FplBaseUrl");
-        services.AddHttpClient<FplClient>(x => x.BaseAddress = new Uri(url));
+        services.AddHttpClient<FplClient>(x => x.BaseAddress = new Uri(url)).ConfigurePrimaryHttpMessageHandler<LoggingHandler>();
     })
     .Build();
 

@@ -4,11 +4,12 @@ namespace FPLV2.Database.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {
-    public UnitOfWork(IElementRepository elements, IElementStatRepository elementStats, ILeagueRepository leagues, IPickRepository picks, IPlayerRepository players, IPointsRepository points, ISeasonRepository seasons, IStatsRepository stats, ITeamRepository teams)
+    public UnitOfWork(IElementRepository elements, IElementStatRepository elementStats, ILeagueRepository leagues, ILoggingRepository logs, IPickRepository picks, IPlayerRepository players, IPointsRepository points, ISeasonRepository seasons, IStatsRepository stats, ITeamRepository teams)
     {
         Elements = elements;
         ElementStats = elementStats;
         Leagues = leagues;
+        Logs = logs;
         Picks = picks;
         Players = players;
         Points = points;
@@ -20,6 +21,7 @@ public class UnitOfWork : IUnitOfWork
     public IElementRepository Elements { get; }
     public IElementStatRepository ElementStats { get; }
     public ILeagueRepository Leagues { get; }
+    public ILoggingRepository Logs { get; }
     public IPickRepository Picks { get; }
     public IPlayerRepository Players { get; }
     public IPointsRepository Points { get; }

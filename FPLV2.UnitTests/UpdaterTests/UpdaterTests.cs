@@ -1,4 +1,5 @@
-﻿using FPLV2.UnitTests.Models;
+﻿using FPLV2.Database.Repositories;
+using FPLV2.UnitTests.Models;
 using FPLV2.Updater;
 using FPLV2.Updater.Api;
 using FPLV2.Updater.Functions;
@@ -119,6 +120,5 @@ public abstract class UpdaterTests : UnitTests
         Assert.AreEqual(player.Entry, dbPlayer.EntryId);
         Assert.AreEqual(player.PlayerName, dbPlayer.PlayerName);
         Assert.AreEqual(player.EntryName, dbPlayer.TeamName);
-        Assert.AreEqual(leagueId, dbPlayer.LeagueId);
     }
 }

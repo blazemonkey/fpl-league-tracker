@@ -56,6 +56,8 @@ namespace FPLV2.UnitTests
         {
             UnitOfWork = GetUnitOfWork();
 
+            await UnitOfWork.Points.DeleteAll();
+            await UnitOfWork.Players.DeleteAll();
             await UnitOfWork.Leagues.DeleteAll();
             await UnitOfWork.ElementStats.DeleteAll();
             await UnitOfWork.Elements.DeleteAll();

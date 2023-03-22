@@ -5,6 +5,7 @@
         public IElementRepository Elements { get; }
         public IElementStatRepository ElementStats { get; }
         public ILeagueRepository Leagues { get; }
+        public ILoggingRepository Logs { get; }
         public IPickRepository Picks { get; }
         public IPlayerRepository Players { get; }
         public IPointsRepository Points { get; }

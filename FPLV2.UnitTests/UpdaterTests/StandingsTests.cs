@@ -50,7 +50,7 @@ public class StandingsTests : UpdaterTests
         for (var i = 0; i < 3; i++)
         {
             var player = model.Results.Players[rand.Next(model.Results.Players.Length)];
-            var dbPlayer = players.FirstOrDefault(x => x.EntryId == player.Entry && x.LeagueId == newLeagueId);
+            var dbPlayer = players.FirstOrDefault(x => x.EntryId == player.Entry);
             Assert.IsNotNull(dbPlayer);
             AssertPlayer(dbPlayer, player, newLeagueId);
         }
@@ -896,5 +896,290 @@ public class StandingsTests : UpdaterTests
         Assert.AreEqual(1414979, players[1].EntryId);
         Assert.AreEqual("G F", players[1].PlayerName);
         Assert.AreEqual("Liverpole P1 FC", players[1].TeamName);
+    }
+
+    [TestMethod]
+    public async Task PlayerExistsInDifferentLeagueNewTest()
+    {
+        var leagueId = 124141;
+        var leagueId2 = 224141;
+
+        var json = $$"""
+        {
+          "new_entries": {
+            "has_next": false,
+            "page": 1,
+            "results": []
+          },
+          "last_updated_data": "2023-01-18T23:22:51Z",
+          "league": {
+            "id": 124141,
+            "name": "PSL",
+            "created": "2022-07-06T10:28:40.793171Z",
+            "league_type": "x"
+          },
+         "standings": {
+           "has_next": false,
+           "page": 1,
+           "results": [
+             {
+               "id": 3355895,
+               "event_total": 65,
+               "player_name": "K C",
+               "rank": 1,
+               "last_rank": 1,
+               "rank_sort": 1,
+               "total": 1145,
+               "entry": 648605,
+               "entry_name": "When Mane met Bayern"
+             }
+           ]
+         }
+        }
+     """;
+
+        var seasonId = await UnitOfWork.Seasons.Insert(new Database.Models.Season() { Year = "2022/23" });
+        BaseApi.SeasonId = seasonId;
+        var newLeagueId = await UnitOfWork.Leagues.Insert(new Database.Models.League() { LeagueId = leagueId, SeasonId = seasonId, Name = "PSL" });       
+
+        await ExecuteApi<StandingsApi>(new Models.MockHttpParameter() { RequestUrl = string.Format(RequestUrl, leagueId, 1), ResponseContent = json });
+
+        var players = await UnitOfWork.Players.GetAllByLeagueId(newLeagueId);
+        Assert.AreEqual(1, players.Length);
+        Assert.AreEqual(648605, players[0].EntryId);
+        Assert.AreEqual("K C", players[0].PlayerName);
+        Assert.AreEqual("When Mane met Bayern", players[0].TeamName);
+
+        var json2 = $$"""
+        {
+          "new_entries": {
+            "has_next": false,
+            "page": 1,
+            "results": []
+          },
+          "last_updated_data": "2023-01-18T23:22:51Z",
+          "league": {
+            "id": 224141,
+            "name": "PSL",
+            "created": "2022-07-06T10:28:40.793171Z",
+            "league_type": "x"
+          },
+         "standings": {
+           "has_next": false,
+           "page": 1,
+           "results": [
+             {
+               "id": 3355895,
+               "event_total": 65,
+               "player_name": "K C A",
+               "rank": 1,
+               "last_rank": 1,
+               "rank_sort": 1,
+               "total": 1145,
+               "entry": 648605,
+               "entry_name": "When Mane met Bayern 2"
+             }
+           ]
+         }
+        }
+     """;
+        var newLeagueId2 = await UnitOfWork.Leagues.Insert(new Database.Models.League() { LeagueId = leagueId2, SeasonId = seasonId, Name = "PSL 2" });
+        await ExecuteApi<StandingsApi>(new Models.MockHttpParameter() { RequestUrl = string.Format(RequestUrl, leagueId, 1), ResponseContent = json }, new Models.MockHttpParameter() { RequestUrl = string.Format(RequestUrl, leagueId2, 1), ResponseContent = json2 });
+
+        players = await UnitOfWork.Players.GetAllByLeagueId(newLeagueId2);
+        Assert.AreEqual(1, players.Length);
+        Assert.AreEqual(648605, players[0].EntryId);
+        Assert.AreEqual("K C A", players[0].PlayerName);
+        Assert.AreEqual("When Mane met Bayern 2", players[0].TeamName);
+
+        var totalPlayers = await UnitOfWork.Players.GetAll();
+        Assert.AreEqual(1, totalPlayers.Length);
+    }
+
+    [TestMethod]
+    public async Task PlayerExistsInDifferentLeagueDeleteTest()
+    {
+        var leagueId = 124141;
+        var leagueId2 = 224141;
+
+        var json = $$"""
+        {
+          "new_entries": {
+            "has_next": false,
+            "page": 1,
+            "results": []
+          },
+          "last_updated_data": "2023-01-18T23:22:51Z",
+          "league": {
+            "id": 124141,
+            "name": "PSL",
+            "created": "2022-07-06T10:28:40.793171Z",
+            "league_type": "x"
+          },
+         "standings": {
+           "has_next": false,
+           "page": 1,
+           "results": [
+             {
+               "id": 3355895,
+               "event_total": 65,
+               "player_name": "K C",
+               "rank": 1,
+               "last_rank": 1,
+               "rank_sort": 1,
+               "total": 1145,
+               "entry": 648605,
+               "entry_name": "When Mane met Bayern"
+             },
+             {
+               "id": 7517407,
+               "event_total": 44,
+               "player_name": "G F",
+               "rank": 5,
+               "last_rank": 5,
+               "rank_sort": 5,
+               "total": 1047,
+               "entry": 1414979,
+               "entry_name": "Liverpole P1 FC"
+             }
+           ]
+         }
+        }
+     """;
+
+        var seasonId = await UnitOfWork.Seasons.Insert(new Database.Models.Season() { Year = "2022/23" });
+        BaseApi.SeasonId = seasonId;
+        var newLeagueId = await UnitOfWork.Leagues.Insert(new Database.Models.League() { LeagueId = leagueId, SeasonId = seasonId, Name = "PSL" });
+
+        await ExecuteApi<StandingsApi>(new Models.MockHttpParameter() { RequestUrl = string.Format(RequestUrl, leagueId, 1), ResponseContent = json });
+
+        var json2 = $$"""
+        {
+          "new_entries": {
+            "has_next": false,
+            "page": 1,
+            "results": []
+          },
+          "last_updated_data": "2023-01-18T23:22:51Z",
+          "league": {
+            "id": 224141,
+            "name": "PSL",
+            "created": "2022-07-06T10:28:40.793171Z",
+            "league_type": "x"
+          },
+         "standings": {
+           "has_next": false,
+           "page": 1,
+           "results": [
+             {
+               "id": 3355895,
+               "event_total": 65,
+               "player_name": "K C A",
+               "rank": 1,
+               "last_rank": 1,
+               "rank_sort": 1,
+               "total": 1145,
+               "entry": 648605,
+               "entry_name": "When Mane met Bayern 2"
+             },
+             {
+               "id": 7517407,
+               "event_total": 44,
+               "player_name": "G F",
+               "rank": 5,
+               "last_rank": 5,
+               "rank_sort": 5,
+               "total": 1047,
+               "entry": 1414979,
+               "entry_name": "Liverpole P1 FC"
+             }
+           ]
+         }
+        }
+     """;
+        var newLeagueId2 = await UnitOfWork.Leagues.Insert(new Database.Models.League() { LeagueId = leagueId2, SeasonId = seasonId, Name = "PSL 2" });
+        await ExecuteApi<StandingsApi>(new Models.MockHttpParameter() { RequestUrl = string.Format(RequestUrl, leagueId, 1), ResponseContent = json }, new Models.MockHttpParameter() { RequestUrl = string.Format(RequestUrl, leagueId2, 1), ResponseContent = json2 });
+
+        var totalPlayers = await UnitOfWork.Players.GetAll();
+        Assert.AreEqual(2, totalPlayers.Length);
+
+
+        json = $$"""
+        {
+          "new_entries": {
+            "has_next": false,
+            "page": 1,
+            "results": []
+          },
+          "last_updated_data": "2023-01-18T23:22:51Z",
+          "league": {
+            "id": 124141,
+            "name": "PSL",
+            "created": "2022-07-06T10:28:40.793171Z",
+            "league_type": "x"
+          },
+         "standings": {
+           "has_next": false,
+           "page": 1,
+           "results": [
+             {
+               "id": 3355895,
+               "event_total": 65,
+               "player_name": "K C",
+               "rank": 1,
+               "last_rank": 1,
+               "rank_sort": 1,
+               "total": 1145,
+               "entry": 648605,
+               "entry_name": "When Mane met Bayern"
+             }
+           ]
+         }
+        }
+     """;
+
+        await ExecuteApi<StandingsApi>(new Models.MockHttpParameter() { RequestUrl = string.Format(RequestUrl, leagueId, 1), ResponseContent = json }, new Models.MockHttpParameter() { RequestUrl = string.Format(RequestUrl, leagueId2, 1), ResponseContent = json2 });
+
+        totalPlayers = await UnitOfWork.Players.GetAll();
+        Assert.AreEqual(2, totalPlayers.Length);
+
+        json2 = $$"""
+        {
+          "new_entries": {
+            "has_next": false,
+            "page": 1,
+            "results": []
+          },
+          "last_updated_data": "2023-01-18T23:22:51Z",
+          "league": {
+            "id": 224141,
+            "name": "PSL",
+            "created": "2022-07-06T10:28:40.793171Z",
+            "league_type": "x"
+          },
+         "standings": {
+           "has_next": false,
+           "page": 1,
+           "results": [
+             {
+               "id": 3355895,
+               "event_total": 65,
+               "player_name": "K C A",
+               "rank": 1,
+               "last_rank": 1,
+               "rank_sort": 1,
+               "total": 1145,
+               "entry": 648605,
+               "entry_name": "When Mane met Bayern 2"
+             }
+           ]
+         }
+        }
+     """;
+
+        await ExecuteApi<StandingsApi>(new Models.MockHttpParameter() { RequestUrl = string.Format(RequestUrl, leagueId, 1), ResponseContent = json }, new Models.MockHttpParameter() { RequestUrl = string.Format(RequestUrl, leagueId2, 1), ResponseContent = json2 });
+
+        totalPlayers = await UnitOfWork.Players.GetAll();
+        Assert.AreEqual(1, totalPlayers.Length);
     }
 }

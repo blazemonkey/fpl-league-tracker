@@ -5,8 +5,10 @@ BEGIN
 	FROM points po
 	JOIN players pl
 	ON po.PlayerId = pl.Id
+	JOIN players_in_leagues pil
+	ON pil.Playerid = pl.Id
 	JOIN leagues l
-	ON l.Id = pl.LeagueId 
+	ON l.Id = pil.LeagueId 
 	WHERE l.LeagueId = @LeagueId
 	AND l.SeasonId = @SeasonId
 	ORDER BY GameweekPoints DESC, Gameweek
@@ -20,8 +22,10 @@ BEGIN
 	FROM points po
 	JOIN players pl
 	ON po.PlayerId = pl.Id
+	JOIN players_in_leagues pil
+	ON pil.Playerid = pl.Id
 	JOIN leagues l
-	ON l.Id = pl.LeagueId 
+	ON l.Id = pil.LeagueId 
 	WHERE l.LeagueId = @LeagueId
 	AND l.SeasonId = @SeasonId
 	ORDER BY GameweekPointsOnBench DESC, Gameweek

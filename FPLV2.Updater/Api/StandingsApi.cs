@@ -43,6 +43,7 @@ public class StandingsApi : BaseApi
 
             // update league
             l.Name = standings.League.Name;
+            l.StartEvent = standings.League.StartEvent;
             var updatedLeague = await UnitOfWork.Leagues.Update(l);
             if (updatedLeague == false)
                 continue;
@@ -61,7 +62,7 @@ public class StandingsApi : BaseApi
     {
         var dbPlayers = players?.Select(x => (Database.Models.Player)x)?.ToList() ?? new List<Database.Models.Player>();
         dbPlayers.ForEach(x => x.LeagueId = leagueId);
-        var result = await UnitOfWork.Players.ReplacePlayersByLeagueId(dbPlayers.ToArray(), leagueId);
+        var result = await UnitOfWork.Players.ReplacePlayersByLeagueId(dbPlayers.ToArray(), leagueId, SeasonId);
         return result;
     }
 }

@@ -46,6 +46,14 @@ public class PointsRepository : BaseRepository, IPointsRepository
             await sqlConnection.DisposeAsync();
         return success;
     }
+
+    public async Task DeleteAll()
+    {
+        var sql = "delete from points";
+        using var conn = await OpenConnection();
+        await conn.ExecuteAsync(sql);
+    }
+
     public async Task<bool> DeleteById(int id, SqlConnection conn = null)
     {
         var sql = "delete from points where id = @Id";

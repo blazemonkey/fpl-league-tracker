@@ -18,6 +18,7 @@ BEGIN
 		[LeagueId] [int] NOT NULL,
 		[SeasonId] [int] NOT NULL,
 		[Name] [nvarchar](max) NULL,
+		[StartEvent] [int] NOT NULL,
 	 CONSTRAINT [PK_Leagues] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
@@ -40,7 +41,6 @@ IF (NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'play
 BEGIN
 	CREATE TABLE [dbo].[players](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[LeagueId] [int] NOT NULL,
 		[EntryId] [int] NOT NULL,
 		[PlayerName] [nvarchar](max) NULL,
 		[TeamName] [nvarchar](max) NULL,
@@ -49,6 +49,30 @@ BEGIN
 		[Id] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+GO
+
+IF (NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'players_in_leagues'))
+BEGIN
+	CREATE TABLE [dbo].[players_in_leagues](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[PlayerId] [int] NOT NULL,
+		[LeagueId] [int] NOT NULL,
+	 CONSTRAINT [PK_Players_In_Leagues] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+	ALTER TABLE [dbo].[players_in_leagues]  WITH CHECK ADD  CONSTRAINT [FK_Players_In_Leagues_Players_Id] FOREIGN KEY([PlayerId])
+	REFERENCES [dbo].[players] ([Id])
+
+	ALTER TABLE [dbo].[players_in_leagues] CHECK CONSTRAINT [FK_Players_In_Leagues_Players_Id]
+
+	ALTER TABLE [dbo].[players_in_leagues]  WITH CHECK ADD  CONSTRAINT [FK_Players_In_Leagues_League_Id] FOREIGN KEY([LeagueId])
+	REFERENCES [dbo].[leagues] ([Id])
+
+	ALTER TABLE [dbo].[players_in_leagues] CHECK CONSTRAINT [FK_Players_In_Leagues_League_Id]
 END
 GO
 
@@ -208,6 +232,22 @@ CREATE TABLE [dbo].[stats](
 (
 	[Id] ASC
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+GO
+
+
+IF (NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'logs'))
+BEGIN
+CREATE TABLE [dbo].[logs](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Type] [int] NOT NULL,
+	[Message] [nvarchar](max) NULL,
+	[LogTimeUtc] [datetime2](7) NOT NULL,
+ CONSTRAINT [PK_Logs] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 END
 GO
