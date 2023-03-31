@@ -13,3 +13,12 @@ build-db:
   script:
     - docker build -t $CI_REGISTRY_IMAGE/db -f FPLV2.Database/Dockerfile .
     - docker push $CI_REGISTRY_IMAGE/db
+
+build-updater:
+  stage: build
+  image: docker
+  services: 
+    - docker:dind
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE/updater -f FPLV2.Updater/Dockerfile .
+    - docker push $CI_REGISTRY_IMAGE/updater
