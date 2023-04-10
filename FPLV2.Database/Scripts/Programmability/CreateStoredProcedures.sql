@@ -31,3 +31,10 @@ BEGIN
 	ORDER BY GameweekPointsOnBench DESC, Gameweek
 END
 GO
+
+CREATE OR ALTER PROCEDURE [dbo].[GetVersion]
+AS
+BEGIN
+	SELECT 100 AS Version
+END
+GO

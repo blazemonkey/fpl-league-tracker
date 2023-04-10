@@ -3,6 +3,7 @@ using FPLV2.Database.Models;
 using FPLV2.Database.Repositories.Interfaces;
 using Microsoft.Extensions.Configuration;
 using System.Data;
+using System.Reflection;
 
 namespace FPLV2.Database.Repositories;
 
@@ -16,6 +17,24 @@ public class StatsRepository : BaseRepository, IStatsRepository
         using var conn = await OpenConnection();
         var result = await conn.QueryAsync<Stats>(sql);
         return result.ToArray();
+    }
+
+    public async Task<Stats> GetById(int id)
+    {
+        var sql = "select * from stats where id = @Id";
+        using var conn = await OpenConnection();
+        var result = await conn.QuerySingleOrDefaultAsync<Stats>(sql, new { Id = id });
+        return result;
+    }
+
+    public async Task<List<IDictionary<string, object>>> GetOverallStatsDetails(string name, int seasonId, int leagueId)
+    {
+        var method = Assembly.GetAssembly(GetType()).GetType(GetType().FullName).GetMethod($"Get{name.Replace(" ", "")}");
+        if (method == null)
+            return null;
+
+        var result = await (Task<List<IDictionary<string, object>>>)method.Invoke(this, new object[] { seasonId, leagueId });
+        return result;
     }
 
     public async Task<List<IDictionary<string, object>>> GetMostPointsInAGameweek(int seasonId, int leagueId)
