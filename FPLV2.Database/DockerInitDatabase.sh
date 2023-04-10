@@ -19,6 +19,7 @@ do
    i=$(( i + 1 ))
 done
 
+sleep 10
 if [$DATABASE_EXISTS -eq 0]
 then
    echo "Creating Tables"
