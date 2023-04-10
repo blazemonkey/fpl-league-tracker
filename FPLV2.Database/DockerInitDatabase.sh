@@ -8,10 +8,17 @@ do
       if [ $DATABASE_EXISTS -eq 0 ]
       then
          echo "Database Created"
+         break
       else
-	 echo "Database Already Exists"
+	     echo "Database Already Exists"
+         CURRENT_VERSION=$(/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $1 -d $2 -h -1 -W -Q "set nocount on;exec GetVersion")
+         if [ $CURRENT_VERSION -ge 100 ]
+         then
+            break
+         else
+            sleep 5
+         fi
       fi
-      break
    else
       echo "SQL Server not ready yet"
       sleep 1
@@ -19,8 +26,7 @@ do
    i=$(( i + 1 ))
 done
 
-sleep 10
-if [$DATABASE_EXISTS -eq 0]
+if [ $DATABASE_EXISTS -eq 0 ]
 then
    echo "Creating Tables"
    /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $1 -d $2 -i CreateTables.sql
@@ -30,7 +36,6 @@ then
    /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $1 -d $2 -i InitialData.sql
 else
    echo "Checking Database Upgrade"
-   CURRENT_VERSION=$(/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $1 -d $2 -h -1 -W -Q "set nocount on;exec GetVersion")
    for SCRIPT in $(ls Upgrades/*.sql | sort -n)
    do
       VERSION=$(basename $SCRIPT | cut -d '.' -f1)
@@ -42,4 +47,5 @@ else
    done   
 fi
 
+echo "Database Check Complete"
 sleep infinity
