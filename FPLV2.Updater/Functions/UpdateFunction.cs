@@ -19,9 +19,9 @@ public class UpdateFunction : Function
 
     [Function("UpdateFunction")]
 #if DEBUG
-    public async Task Run([TimerTrigger("* * * * * *")] FunctionInfo info)
+    public async Task Run([TimerTrigger("0 * * * * *")] FunctionInfo info)
 #else
-    public async Task Run([TimerTrigger("0 */1 * * * *")] FunctionInfo info)
+    public async Task Run([TimerTrigger("0 0 */1 * * *")] FunctionInfo info)
 #endif
     {
         try
