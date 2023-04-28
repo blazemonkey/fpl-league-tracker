@@ -8,3 +8,10 @@ public class Points : BaseModel
     public int GameweekPointsOnBench { get; set; }
     public int Total { get; set; }
 }
+
+public class PointsHistory
+{
+    public string TeamName { get; set; }
+    public int Gameweek { get; set; }
+    public int Points { get; set; }
+}

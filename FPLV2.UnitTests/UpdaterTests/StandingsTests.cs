@@ -1,5 +1,5 @@
-﻿using FPLV2.Updater.Api;
-using FPLV2.Updater.Models;
+﻿using FPLV2.Client.Models;
+using FPLV2.Updater.Api;
 using System.Text.Json;
 
 namespace FPLV2.UnitTests.UpdaterTests;

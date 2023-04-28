@@ -1,7 +1,7 @@
-﻿using FPLV2.Updater.Models;
+﻿using FPLV2.Client.Models;
 using System.Text.Json;
 
-namespace FPLV2.Updater;
+namespace FPLV2.Client;
 
 public class FplClient
 {

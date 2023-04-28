@@ -1,5 +1,5 @@
-﻿using FPLV2.Database.Repositories.Interfaces;
-using System.Diagnostics;
+﻿using FPLV2.Client;
+using FPLV2.Database.Repositories.Interfaces;
 
 namespace FPLV2.Updater.Api;
 

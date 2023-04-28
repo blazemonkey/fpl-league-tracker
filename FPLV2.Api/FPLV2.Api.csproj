@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FPLV2.Database\FPLV2.Database.csproj" />
+    <ProjectReference Include="..\FPLV2.Client\FPLV2.Client.csproj" />
   </ItemGroup>
 
 </Project>

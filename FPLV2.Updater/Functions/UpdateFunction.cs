@@ -1,4 +1,5 @@
-﻿using FPLV2.Database.Repositories.Interfaces;
+﻿using FPLV2.Client;
+using FPLV2.Database.Repositories.Interfaces;
 using FPLV2.Updater.Api;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Configuration;

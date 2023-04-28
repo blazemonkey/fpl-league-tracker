@@ -1,4 +1,5 @@
-﻿using FPLV2.Database.Repositories;
+﻿using FPLV2.Client;
+using FPLV2.Database.Repositories;
 using FPLV2.UnitTests.Models;
 using FPLV2.Updater;
 using FPLV2.Updater.Api;
@@ -115,7 +116,7 @@ public abstract class UpdaterTests : UnitTests
     /// <param name="dbPlayer">Player model stored in Database</param>
     /// <param name="player">Player model returned from API</param>
     /// <param name="leagueId">Id of the league</param>
-    protected static void AssertPlayer(Database.Models.Player dbPlayer, Updater.Models.Player player, int leagueId)
+    protected static void AssertPlayer(Database.Models.Player dbPlayer, Client.Models.Player player, int leagueId)
     {
         Assert.AreEqual(player.Entry, dbPlayer.EntryId);
         Assert.AreEqual(player.PlayerName, dbPlayer.PlayerName);

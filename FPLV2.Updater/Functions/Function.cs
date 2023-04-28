@@ -1,4 +1,5 @@
-﻿using FPLV2.Database.Repositories.Interfaces;
+﻿using FPLV2.Client;
+using FPLV2.Database.Repositories.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 

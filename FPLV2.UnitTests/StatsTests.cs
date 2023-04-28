@@ -1,11 +1,4 @@
-﻿using FPLV2.Updater.Api;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
+﻿using System.Text.RegularExpressions;
 
 namespace FPLV2.UnitTests;
 

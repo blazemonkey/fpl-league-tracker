@@ -111,4 +111,12 @@ public class PointsRepository : BaseRepository, IPointsRepository
 
         return true;
     }
+
+    public async Task<PointsHistory[]> GetTotalPointsHistory(int leagueId)
+    {
+        var sql = "select p.PlayerName, p.TeamName, po.Gameweek, po.Total as Points from leagues l join players_in_leagues pil on l.Id = pil.LeagueId join players p on pil.PlayerId = p.Id join points po on p.Id = po.PlayerId where l.Id = @LeagueId and po.Gameweek >= l.StartEvent order by p.Id, po.Gameweek";
+        using var conn = await OpenConnection();
+        var result = await conn.QueryAsync<PointsHistory>(sql, new { LeagueId = leagueId }); // note this is the Id column in the Leagues table, not LeagueId
+        return result.ToArray();
+    }
 }

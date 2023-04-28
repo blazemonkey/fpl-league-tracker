@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace FPLV2.Updater.Models;
+namespace FPLV2.Client.Models;
 
 public class League
 {
