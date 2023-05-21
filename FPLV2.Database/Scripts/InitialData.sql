@@ -4,3 +4,10 @@ BEGIN
 	INSERT INTO [dbo].[stats] VALUES (1, 'Most Bench Points In A Gameweek', 'No Faith', '1_mostbenchpointsinagameweek', 2, 1)
 END
 GO
+
+IF ((SELECT COUNT(1) FROM [dbo].[charts]) = 0)
+BEGIN
+	INSERT INTO [dbo].[charts] VALUES (1, 1, 'Gameweek Total Points History', '', 1, 1)
+END
+GO
+

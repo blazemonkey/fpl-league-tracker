@@ -12,5 +12,4 @@ public interface IPointsRepository
     Task<int> Insert(Points points, SqlConnection conn = null);
     Task<bool> Update(Points points, SqlConnection conn = null);
     Task<bool> ReplacePointsByPlayerId(Points[] points, int playerId);
-    Task<PointsHistory[]> GetTotalPointsHistory(int leagueId);
 }

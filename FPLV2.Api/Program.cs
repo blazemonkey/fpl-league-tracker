@@ -2,8 +2,6 @@ using FPLV2.Client;
 using FPLV2.Database.Models;
 using FPLV2.Database.Repositories;
 using FPLV2.Database.Repositories.Interfaces;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +31,7 @@ app.UseHttpsRedirection();
 app.MapGet("/leagues/{leagueId}/check", async (HttpContext context, FplClient fplClient, int leagueId) =>
 {
     try
-    {        
+    {
         var league = await fplClient.GetLeagueStandings(leagueId);
         if (league.League.LeagueType != "x")
             return "";
@@ -47,7 +45,7 @@ app.MapGet("/leagues/{leagueId}/check", async (HttpContext context, FplClient fp
 });
 
 // Add the league id to the database
-app.MapPost("/leagues/{leagueId}", async (HttpContext context, IUnitOfWork unitOfWork, FplClient fplClient, int leagueId) => 
+app.MapPost("/leagues/{leagueId}", async (HttpContext context, IUnitOfWork unitOfWork, FplClient fplClient, int leagueId) =>
 {
     var seasons = await unitOfWork.Seasons.GetAll();
     var latestSeason = seasons.LastOrDefault();
@@ -56,19 +54,6 @@ app.MapPost("/leagues/{leagueId}", async (HttpContext context, IUnitOfWork unitO
 
     var league = await fplClient.GetLeagueStandings(leagueId);
     return false;
-});
-
-// Get the points for all the players in the league, this is used for showing charts
-app.MapGet("/leagues/{id}/points-history/{type}", async (IUnitOfWork unitOfWork, IConfiguration configuration, int id, string type) =>
-{
-    PointsHistory[] points = null;
-    if (type == "total")
-        points = await unitOfWork.Points.GetTotalPointsHistory(id);
-    else
-        throw new Exception("Type is not valid");
-
-    var results = points.GroupBy(x => x.TeamName).ToDictionary(x => x.Key, x => x.Select(x => new { x.Gameweek, x.Points }).ToArray());
-    return results;
 });
 #endregion
 
@@ -80,7 +65,7 @@ app.MapGet("/stats", async (IUnitOfWork unitOfWork, IConfiguration configuration
     return stats.OrderBy(x => x.DisplayOrder).ToArray();
 });
 
-// Get Stats details by Id
+// Get overall Stats details by Id
 app.MapGet("/stats/overall/{id}/{seasonId}/{leagueId}", async (IUnitOfWork unitOfWork, int id, int seasonId, int leagueId) =>
 {
     var stats = await unitOfWork.Stats.GetById(id);
@@ -89,6 +74,26 @@ app.MapGet("/stats/overall/{id}/{seasonId}/{leagueId}", async (IUnitOfWork unitO
 
     var details = await unitOfWork.Stats.GetOverallStatsDetails(stats.Name, seasonId, leagueId);
     return details;
+});
+#endregion
+
+#region Charts
+// Get all Charts
+app.MapGet("/charts", async (IUnitOfWork unitOfWork, IConfiguration configuration) =>
+{
+    var stats = await unitOfWork.Charts.GetAll();
+    return stats.OrderBy(x => x.DisplayOrder).ToArray();
+});
+
+// Get line Chart details by Id
+app.MapGet("/charts/line/{id}/{seasonId}/{leagueId}", async (IUnitOfWork unitOfWork, int id, int seasonId, int leagueId) =>
+{
+    var c = await unitOfWork.Charts.GetById(id);
+    if (c == null)
+        return null;
+
+    var chart = await unitOfWork.Charts.GetLineChart(c.Name, seasonId, leagueId);
+    return chart;
 });
 #endregion
 
