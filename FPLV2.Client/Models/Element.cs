@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using FPLV2.Database.Models;
+using System.Text.Json.Serialization;
 
 namespace FPLV2.Client.Models;
 
@@ -215,7 +216,7 @@ public class Element
             WebName = element.WebName,
             ElementId = element.Id,
             ElementTeamId = element.Team,
-            ElementType = element.ElementType
+            ElementType = (ElementType)element.ElementType
         };
 
         return newElement;

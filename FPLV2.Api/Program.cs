@@ -16,6 +16,7 @@ foreach (var type in types)
     builder.Services.AddTransient(interfaceType, type);
 }
 
+builder.Services.AddCors();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 var url = builder.Configuration.GetValue<string>("FplBaseUrl") ?? string.Empty;
 builder.Services.AddHttpClient<FplClient>(x => x.BaseAddress = new Uri(url));
@@ -25,6 +26,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
+app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 #region Leagues
 // Check if this league id exists and return the name so it can be confirmed on the client side
@@ -57,6 +59,43 @@ app.MapPost("/leagues/{leagueId}", async (HttpContext context, IUnitOfWork unitO
 });
 #endregion
 
+#region Elements
+app.MapGet("/elements/{seasonId}", async (IUnitOfWork unitOfWork, int seasonId) =>
+{
+    var teams = await unitOfWork.Elements.GetAllBySeasonId(seasonId);
+    return teams.ToArray();
+});
+#endregion
+
+#region Element Stats
+app.MapGet("/element-stats/{seasonId}", async (IUnitOfWork unitOfWork, int seasonId) =>
+{
+    var teams = await unitOfWork.ElementStats.GetAllBySeasonId(seasonId);
+    return teams.ToArray();
+});
+#endregion
+
+#region Players
+app.MapGet("/players/{seasonId}/{leagueId}", async (IUnitOfWork unitOfWork, int seasonId, int leagueId) =>
+{
+    var leagues = await unitOfWork.Leagues.GetAllBySeasonId(seasonId);
+    var league = leagues.FirstOrDefault(x => x.LeagueId == leagueId);
+    if (league == null)
+        return null;
+
+    var players = await unitOfWork.Players.GetAllByLeagueId(league.Id);
+    return players.ToArray();
+});
+#endregion
+
+#region Teams
+app.MapGet("/teams/{seasonId}", async (IUnitOfWork unitOfWork, int seasonId) =>
+{
+    var teams = await unitOfWork.Teams.GetAllBySeasonId(seasonId);
+    return teams.ToArray();
+});
+#endregion
+
 #region Stats
 // Get all Stats
 app.MapGet("/stats", async (IUnitOfWork unitOfWork, IConfiguration configuration) =>
@@ -79,7 +118,7 @@ app.MapGet("/stats/overall/{id}/{seasonId}/{leagueId}", async (IUnitOfWork unitO
 
 #region Charts
 // Get all Charts
-app.MapGet("/charts", async (IUnitOfWork unitOfWork, IConfiguration configuration) =>
+app.MapGet("/charts", async (IUnitOfWork unitOfWork) =>
 {
     var stats = await unitOfWork.Charts.GetAll();
     return stats.OrderBy(x => x.DisplayOrder).ToArray();
@@ -93,6 +132,13 @@ app.MapGet("/charts/line/{id}/{seasonId}/{leagueId}", async (IUnitOfWork unitOfW
         return null;
 
     var chart = await unitOfWork.Charts.GetLineChart(c.Name, seasonId, leagueId);
+    return chart;
+});
+
+// Get the Points Chart
+app.MapPost("/charts/points/{seasonId}/{leagueId}", async (IUnitOfWork unitOfWork, int seasonId, int leagueId, PointsChartOptions options) =>
+{
+    var chart = await unitOfWork.Charts.GetPointsChart(seasonId, leagueId, options);
     return chart;
 });
 #endregion

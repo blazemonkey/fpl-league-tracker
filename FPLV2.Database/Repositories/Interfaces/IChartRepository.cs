@@ -8,4 +8,6 @@ public interface IChartRepository
     Task<Chart> GetById(int id);
     Task<IDictionary<string, LineChartPoint[]>> GetLineChart(string name, int seasonId, int leagueId);
     Task<IDictionary<string, LineChartPoint[]>> GetGameweekTotalPointsHistory(int seasonId, int leagueId);
+    Task<IDictionary<string, LineChartPoint[]>> GetGameweekPointsHistory(int seasonId, int leagueId);
+    Task<PointsChartGroupedData[]> GetPointsChart(int seasonId, int leagueId, PointsChartOptions options);
 }
