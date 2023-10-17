@@ -38,7 +38,7 @@ public class Gameweek
     [JsonPropertyName("top_element_info")]
     public object TopElementInfo { get; set; }
     [JsonPropertyName("transfers_made")]
-    public int TransfersMade { get; set; }
+    public int? TransfersMade { get; set; }
     [JsonPropertyName("most_captained")]
     public int? MostCaptained { get; set; }
     [JsonPropertyName("most_vice_captained")]
