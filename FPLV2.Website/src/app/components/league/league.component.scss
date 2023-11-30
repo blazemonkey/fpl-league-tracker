@@ -1,0 +1,52 @@
+.league-container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 1.0rem;
+
+    .league-title {
+        font-weight: bold;
+    }
+}
+
+.league-section {
+    max-width: 1000px;
+    margin: 10px;
+    width: 100%;
+
+    h4 {
+        border-bottom: 2px solid white;
+        padding: 0.5rem;
+    }
+
+    .select-wrapper {
+        position: relative;
+        width: 20rem;
+
+    select {
+        appearance: none;
+        outline: 10px red;
+        border: 0;
+        box-shadow: none;
+        color: #fff;
+        background-color: #1e1e1e;
+        background-image: none;
+        cursor: pointer;
+        position: relative;
+        display: flex;    
+        padding: 0.5rem;
+        width: 20rem;
+        border-radius: .25em;
+        }
+    }
+  
+    .select-wrapper::after {
+        content: "▼";
+        font-size: 1rem;
+        top: 6px;
+        right: 10px;
+        position: absolute;
+        pointer-events: none;
+    }
+}

@@ -1,0 +1,21 @@
+<app-title></app-title>
+
+<div class="search-results-hint-container">
+    <h3>Search results for "{{this.name}}"</h3>
+    <h6>Hint: To get quicker results, search by ID</h6>
+</div>
+
+<div class="search-results-container"> 
+    <ag-grid-angular class="search-results"
+        *ngIf="!loading"
+        class="ag-theme-alpine-dark"
+        [headerHeight]="0"
+        [domLayout]="domLayout"
+        [pagination]="true"
+        [rowSelection]="rowSelection"
+        [suppressCellFocus]="true"
+        [rowData]="rows"
+        [columnDefs]="columns"
+        (rowSelected)="onRowSelected($event)">
+    </ag-grid-angular>
+</div>

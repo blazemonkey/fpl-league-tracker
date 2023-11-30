@@ -1,0 +1,16 @@
+.stat-table-container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    ag-grid-angular {
+        max-width: 1000px;
+        margin: 10px;
+        width: 100%;
+
+        ::ng-deep .ag-row-even , ::ng-deep .ag-row-odd {
+            cursor: pointer;
+        }
+    }    
+}

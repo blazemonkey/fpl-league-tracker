@@ -1,0 +1,35 @@
+<app-title></app-title>
+
+<div class="league-container">
+    <h3 class="league-title">{{this.name}}</h3>
+
+    <div class="league-section">
+        <h4>Stats</h4>
+        <div class="select-wrapper">
+            <select [(ngModel)]="selectedStat">
+                <option *ngFor="let s of stats" [ngValue]="s">{{s.name}}</option>
+            </select>
+        </div>
+        <app-stat-table id="stats-table" *ngIf="this.selectedStat" 
+            [type]="this.selectedStat.type" 
+            [statId]="this.selectedStat.id" 
+            [seasonId]="this.seasonId" 
+            [leagueId]="this.leagueId">
+        </app-stat-table>
+    </div>
+
+    <div class="league-section">
+        <h4>Charts</h4>
+        <div class="select-wrapper">
+            <select [(ngModel)]="selectedChart">
+                <option *ngFor="let c of charts" [ngValue]="c">{{c.name}}</option>
+            </select>
+        </div>
+        <app-chart id="chart" *ngIf="this.selectedChart" 
+            [type]="this.selectedChart.type" 
+            [chartId]="this.selectedChart.id" 
+            [seasonId]="this.seasonId" 
+            [leagueId]="this.leagueId">
+        </app-chart>
+    </div>
+</div>

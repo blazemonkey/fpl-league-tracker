@@ -1,0 +1,25 @@
+h1 {
+    font-size: 3rem;
+    margin-bottom: 0rem;
+}
+
+h6 {
+    margin-bottom: 0rem;
+}
+
+.title-container {
+    font-family: 'Baumans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+    .title {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+
+        .title-shade {
+            color: var(--main-color);
+        }
+    }
+}

@@ -1,0 +1,30 @@
+<app-title></app-title>
+
+<div class="search-container">
+  <input class="search-input" type="text" [(ngModel)]="searchQuery" placeholder="Search" (keypress)="search($event)">
+  <p>Start by finding a Mini League by searching for it's Name or ID</p>
+  <p>The ID is found in the FPL URL, for example [https://fantasy.premierleague.com/leagues/<b class="league-id">132180</b>/standings/c]</p>
+</div>
+
+<div class="features-container">
+  <h2>Features</h2>
+  <c-carousel>
+    <c-carousel-indicators></c-carousel-indicators>
+    <c-carousel-inner>
+      <c-carousel-item *ngFor="let feature of features">
+        <img
+          alt="{{feature.title}}"
+          class="d-block w-100"
+          loading="lazy"
+          src="{{feature.source}}"
+        />
+        <c-carousel-caption class="d-none d-md-block">
+          <h3>{{feature.title}}</h3>
+          <p>{{feature.description}}</p>
+        </c-carousel-caption>
+      </c-carousel-item>
+    </c-carousel-inner>
+    <c-carousel-control [routerLink] caption="Previous" direction="prev"></c-carousel-control>
+    <c-carousel-control [routerLink] caption="Next" direction="next"></c-carousel-control>
+  </c-carousel>
+</div>

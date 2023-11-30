@@ -1,0 +1,31 @@
+/* You can add global styles to this file, and also import other style files */
+@import "@coreui/coreui/scss/coreui";
+@import 'ag-grid-community/styles/ag-grid.css';
+@import 'ag-grid-community/styles/ag-theme-alpine.css';
+
+:root {
+    --main-color: #FFC107;
+    --main-font-family: 'Titillium Web', sans-serif;
+}
+
+.ag-theme-alpine-dark {
+    --ag-font-size: 14px;
+    --ag-font-family: var(--main-font-family);
+  }
+
+html, body {
+    background-color: black;
+    color: white;
+    font-family: var(--main-font-family);
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 10px;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
+}
+
+input {
+    color: white;
+    font-family: var(--main-font-family);
+}
