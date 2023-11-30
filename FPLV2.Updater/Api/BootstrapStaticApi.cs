@@ -59,7 +59,7 @@ public class BootstrapStaticApi : BaseApi
     /// Inserts the Season into the database if it doesn't exist yet
     /// </summary>
     /// <param name="result">The Id of the Season</param>
-    /// <returns></returns>
+    /// <returns>Season Id</returns>
     private async Task<int> UpdateSeasons(BootstrapStatic result)
     {
         var openingDate = result.Gameweeks?.FirstOrDefault()?.DeadlineTime ?? DateTime.MinValue;

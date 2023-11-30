@@ -19,10 +19,10 @@ public class FplClient
         return result;
     }
 
-    public async Task<Standings> GetLeagueStandings(int leagueId)
+    public async Task<Standings> GetLeagueStandings(int leagueId, bool includePlayers)
     {
         var players = new List<Player>();
-        var result = await GetLeagueStandings(leagueId, 1, players);
+        var result = await GetLeagueStandings(leagueId, 1, includePlayers ? players : null);
         return result;
     }
 
@@ -30,6 +30,8 @@ public class FplClient
     {
         var response = await _httpClient.GetAsync($"leagues-classic/{leagueId}/standings/?page_standings={page}");
         var result = await ReadResponse<Standings>(response);
+        if (players == null)
+            return result;
 
         players.AddRange(result?.Results?.Players ?? new Player[] { });
         if (result?.Results?.HasNext == true)
@@ -48,6 +50,13 @@ public class FplClient
         var result = await ReadResponse<PickRoot>(response);
         return result.Picks;
 
+    }
+
+    public async Task<Entry> GetEntry(int entryId)
+    {
+        var response = await _httpClient.GetAsync($"entry/{entryId}/");
+        var result = await ReadResponse<Entry>(response);
+        return result;
     }
 
     public async Task<Points[]> GetPointsHistory(int entryId)

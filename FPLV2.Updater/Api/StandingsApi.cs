@@ -34,7 +34,7 @@ public class StandingsApi : BaseApi
         foreach (var l in leagues)
         {
             // get league standings
-            var standings = await FplClient.GetLeagueStandings(l.LeagueId);
+            var standings = await FplClient.GetLeagueStandings(l.LeagueId, true);
             if (standings == null)
                 continue;
 

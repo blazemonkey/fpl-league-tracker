@@ -37,6 +37,35 @@ BEGIN
 END
 GO
 
+IF (NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'leagues_search'))
+BEGIN
+	CREATE TABLE [dbo].[leagues_search](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[LeagueId] [int] NOT NULL,
+		[SeasonId] [int] NOT NULL,
+		[Name] [nvarchar](max) NULL,
+		[LeagueType] [nvarchar](1) NOT NULL,
+		[CreatedTimeUtc] [datetime2](7) NOT NULL,
+		[AdminEntryId] [int] NULL,
+		[AdminPlayerName] [nvarchar](max) NULL,
+	 CONSTRAINT [PK_Leagues_Search] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+	 CONSTRAINT [AK_Leagues_Search_LeagueId] UNIQUE NONCLUSTERED 
+	(
+		[LeagueId] ASC,
+		[SeasonId] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+	ALTER TABLE [dbo].[leagues_search]  WITH CHECK ADD  CONSTRAINT [FK_Leagues_Search_Seasons_SeasonId] FOREIGN KEY([SeasonId])
+	REFERENCES [dbo].[seasons] ([Id])
+
+	ALTER TABLE [dbo].[leagues_search] CHECK CONSTRAINT [FK_Leagues_Search_Seasons_SeasonId]
+END
+GO
+
 IF (NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'players'))
 BEGIN
 	CREATE TABLE [dbo].[players](
