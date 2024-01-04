@@ -1,0 +1,32 @@
+name: Deploy to Azure
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AZURE_RESOURCE_GROUP: 'fpl-league-tracker'
+  AZURE_LOCATION: 'Australia East'
+  AZURE_SERVER_NAME: 'fpl-league-tracker'
+  AZURE_DATABASE_NAME: 'FPL'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Run Deploy Azure Resources
+        uses: azure/arm-deploy@v1
+        with:
+          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+          template: ./FPLV2.ArmTemplates/azure-deploy.json"
+          parameters: serverName=${{ vars.AZURE_SERVER_NAME }} sqlDBName=${{ vars.AZURE_DATABASE_NAME }} location=${{ AZURE_LOCATION }} administratorLogin=${{ vars.AZURE_DATABASE_USERNAME }} administratorLoginPassword=${{ secrets.AZURE_DATABASE_PASSWORD }}
