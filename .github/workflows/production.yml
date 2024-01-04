@@ -28,5 +28,5 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-          template: ./FPLV2.ArmTemplates/azure-deploy.json"
-          parameters: serverName=${{ vars.AZURE_SERVER_NAME }} sqlDBName=${{ vars.AZURE_DATABASE_NAME }} location=${{ vars.AZURE_LOCATION }} administratorLogin=${{ vars.AZURE_DATABASE_USERNAME }} administratorLoginPassword=${{ secrets.AZURE_DATABASE_PASSWORD }}
+          template: ./FPLV2.ArmTemplates/azure-deploy.json
+          parameters: serverName=${{ env.AZURE_SERVER_NAME }} sqlDBName=${{ env.AZURE_DATABASE_NAME }} location=${{ env.AZURE_LOCATION }} administratorLogin=${{ vars.AZURE_DATABASE_USERNAME }} administratorLoginPassword=${{ secrets.AZURE_DATABASE_PASSWORD }}
