@@ -47,6 +47,7 @@
                 {
                     "type": "firewallrules",
                     "apiVersion": "2022-05-01-preview",
+                    "name": "AllowAzureResources",
                     "dependsOn": [
                         "[resourceId('Microsoft.Sql/servers', concat(parameters('serverName')))]"
                     ],
