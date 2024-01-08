@@ -12,6 +12,7 @@ env:
   AZURE_DATABASE_NAME: 'FPL'
   AZURE_STORAGE_ACCOUNT_NAME: 'fplleaguetrackerstorage'
   AZURE_DATABASE_DEPLOY_APPLICATION_INSIGHTS_NAME: 'fpl-league-tracker-database-deploy-insights'
+  AZURE_DATABASE_DEPLOY_FUNCTION_NAME: 'fpl-league-tracker-database-deploy'
 
 jobs:
   build-and-deploy:
@@ -31,4 +32,4 @@ jobs:
         with:
           resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
           template: ./FPLV2.ArmTemplates/azure-deploy.json
-          parameters: serverName="${{ env.AZURE_SERVER_NAME }}" sqlDBName="${{ env.AZURE_DATABASE_NAME }}" location="${{ env.AZURE_LOCATION }}" administratorLogin="${{ vars.AZURE_DATABASE_USERNAME }}" administratorLoginPassword="${{ secrets.AZURE_DATABASE_PASSWORD }}" storageAccountName="${{ env.AZURE_STORAGE_ACCOUNT_NAME }}" databaseDeployApplicationInsightsName="${{ env.AZURE_DATABASE_DEPLOY_APPLICATION_INSIGHTS_NAME }}"
+          parameters: serverName="${{ env.AZURE_SERVER_NAME }}" sqlDBName="${{ env.AZURE_DATABASE_NAME }}" location="${{ env.AZURE_LOCATION }}" administratorLogin="${{ vars.AZURE_DATABASE_USERNAME }}" administratorLoginPassword="${{ secrets.AZURE_DATABASE_PASSWORD }}" storageAccountName="${{ env.AZURE_STORAGE_ACCOUNT_NAME }}" databaseDeployApplicationInsightsName="${{ env.AZURE_DATABASE_DEPLOY_APPLICATION_INSIGHTS_NAME }}" databaseDeployFunctionName="${{ env.AZURE_DATABASE_DEPLOY_FUNCTION_NAME }}"
