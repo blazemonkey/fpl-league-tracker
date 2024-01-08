@@ -31,6 +31,12 @@
             "metadata": {
                 "description": "The administrator password of the SQL logical server."
             }
+        },
+        "storageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the Storage Account."
+            }
         }
     },
     "resources": [
@@ -71,6 +77,20 @@
                     ]
                 }
             ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2022-05-01",
+            "name": "[parameters('storageAccountName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+              "name": "Standard_LRS"
+            },
+            "kind": "Storage",
+            "properties": {
+              "supportsHttpsTrafficOnly": true,
+              "defaultToOAuthAuthentication": true
+            }
         }
     ]
 }
