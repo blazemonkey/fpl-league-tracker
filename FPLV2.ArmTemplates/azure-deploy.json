@@ -120,13 +120,13 @@
             "apiVersion": "2021-03-01",
             "name": "[parameters('databaseDeployFunctionName')]",
             "location": "[parameters('location')]",
-            "kind": "linux",
+            "kind": "windows",
             "sku": {
               "name": "Y1",
               "tier": "Dynamic"
             },
             "properties": {
-                "reserved": true
+                "reserved": false
             }
         },
         {
@@ -134,11 +134,10 @@
             "apiVersion": "2021-03-01",
             "name": "[parameters('databaseDeployFunctionName')]",
             "location": "[parameters('location')]",
-            "kind": "functionapp,linux",
+            "kind": "functionapp",
             "properties": {
               "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('databaseDeployFunctionName'))]",
               "siteConfig": {
-                "linuxFxVersion": "",
                 "appSettings": [
                   {
                     "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
