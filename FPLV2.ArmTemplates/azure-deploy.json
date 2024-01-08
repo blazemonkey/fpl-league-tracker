@@ -43,6 +43,12 @@
             "metadata": {
                 "description": "The name of the Application Insights for the Database Deploy Azure Function."
             }
+        },
+        "databaseDeployFunctionName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the Database Deploy Azure Function."
+            }
         }
     },
     "resources": [
@@ -107,6 +113,44 @@
             "properties": {
               "Application_Type": "web",
               "Request_Source": "rest"
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2021-03-01",
+            "name": "[parameters('databaseDeployFunctionName')]",
+            "location": "[parameters('location')]",
+            "kind": "linux",
+            "sku": {
+              "name": "Y1",
+              "tier": "Dynamic"
+            },
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2021-03-01",
+            "name": "[parameters('databaseDeployFunctionName')]",
+            "location": "[parameters('location')]",
+            "kind": "functionapp",
+            "identity": {
+              "type": "SystemAssigned"
+            },
+            "properties": {
+              "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('databaseDeployFunctionName'])]",
+              "siteConfig": {
+                "appSettings": [
+                  {
+                    "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                    "value": "[reference(resourceId('Microsoft.Insights/components', parameters('databaseDeployApplicationInsightsName')), '2020-02-02').InstrumentationKey]"
+                  },
+                  {
+                    "name": "FUNCTIONS_WORKER_RUNTIME",
+                    "value": "dotnet-isolated"
+                  }
+                ]
+              },
+              "httpsOnly": true
             }
         }
     ]
