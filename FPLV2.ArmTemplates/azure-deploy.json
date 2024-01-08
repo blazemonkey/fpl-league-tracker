@@ -125,14 +125,16 @@
               "name": "Y1",
               "tier": "Dynamic"
             },
-            "properties": {}
+            "properties": {
+                "reserved": true
+            }
         },
         {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2021-03-01",
             "name": "[parameters('databaseDeployFunctionName')]",
             "location": "[parameters('location')]",
-            "kind": "functionapp",
+            "kind": "functionapp,linux",
             "identity": {
               "type": "SystemAssigned"
             },
