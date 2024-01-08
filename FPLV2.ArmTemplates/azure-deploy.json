@@ -135,25 +135,30 @@
             "name": "[parameters('databaseDeployFunctionName')]",
             "location": "[parameters('location')]",
             "kind": "functionapp,linux",
-            "identity": {
-              "type": "SystemAssigned"
-            },
             "properties": {
               "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('databaseDeployFunctionName'))]",
               "siteConfig": {
+                "linuxFxVersion": "",
                 "appSettings": [
                   {
                     "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                     "value": "[reference(resourceId('Microsoft.Insights/components', parameters('databaseDeployApplicationInsightsName')), '2020-02-02').InstrumentationKey]"
                   },
                   {
+					"name": "AzureWebJobsStorage",
+					"value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')),'2017-06-01').keys[0].value)]"
+				  },                  
+                  {
                     "name": "FUNCTIONS_WORKER_RUNTIME",
                     "value": "dotnet-isolated"
                   },
                   {
                     "name": "FUNCTIONS_EXTENSION_VERSION",
-                    "value": "~4"
-          
+                    "value": "~4"        
+                  },
+                  {
+                    "name": "WEBSITE_RUN_FROM_PACKAGE",
+                    "value": "0"
                   }
                 ],
                 "netFrameworkVersion": "7.0"
