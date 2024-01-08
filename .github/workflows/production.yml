@@ -27,9 +27,27 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Run Deploy Azure Resources
+    - name: Build and Publish
+      run: |
+        dotnet publish -c Release -o out
+
+      - name: Create Azure Resources
         uses: azure/arm-deploy@v1
         with:
           resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
           template: ./FPLV2.ArmTemplates/azure-deploy.json
           parameters: serverName="${{ env.AZURE_SERVER_NAME }}" sqlDBName="${{ env.AZURE_DATABASE_NAME }}" location="${{ env.AZURE_LOCATION }}" administratorLogin="${{ vars.AZURE_DATABASE_USERNAME }}" administratorLoginPassword="${{ secrets.AZURE_DATABASE_PASSWORD }}" storageAccountName="${{ env.AZURE_STORAGE_ACCOUNT_NAME }}" databaseDeployApplicationInsightsName="${{ env.AZURE_DATABASE_DEPLOY_APPLICATION_INSIGHTS_NAME }}" databaseDeployFunctionName="${{ env.AZURE_DATABASE_DEPLOY_FUNCTION_NAME }}"
+
+      - name: Building Database Deploy Azure Function
+        shell: pwsh
+        run: |
+          pushd './FPLV2.DatabaseDeploy'
+          dotnet build --configuration Release --output ./output
+          popd
+      
+      - name: Updating Database Deploy Azure Function
+        uses: azure/functions-action@v1
+        id: fa
+        with:
+          app-name: fpl-league-tracker-database-deploy
+          package: './FPLV2.DatabaseDeploy/output'
