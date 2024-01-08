@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "FPLV2.DatabaseDeploy": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7276"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "httpPort": 32386,
+      "useSSL": false
+    }
+  }
+}
