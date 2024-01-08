@@ -27,9 +27,9 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Build and Publish
-      run: |
-        dotnet publish -c Release -o out
+      - name: Build and Publish
+        run: |
+          dotnet publish -c Release -o out
 
       - name: Create Azure Resources
         uses: azure/arm-deploy@v1
