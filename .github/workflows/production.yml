@@ -34,6 +34,14 @@ jobs:
           Write-Host "Checking"
           sqlcmd -l 60 -S "(localdb)\MSSQLLocalDB" -Q "SELECT @@VERSION;"
 
+      - name: Run Unit Tests
+        shell: pwsh
+        run: |
+          pushd './FPLV2.UnitTests'
+          dotnet test --configuration Release
+          popd
+
+
   deploy-to-azure:
     runs-on: ubuntu-latest
     needs: build-and-test
