@@ -38,6 +38,12 @@ jobs:
           template: ./FPLV2.ArmTemplates/azure-deploy.json
           parameters: serverName="${{ env.AZURE_SERVER_NAME }}" sqlDBName="${{ env.AZURE_DATABASE_NAME }}" location="${{ env.AZURE_LOCATION }}" administratorLogin="${{ vars.AZURE_DATABASE_USERNAME }}" administratorLoginPassword="${{ secrets.AZURE_DATABASE_PASSWORD }}" storageAccountName="${{ env.AZURE_STORAGE_ACCOUNT_NAME }}" databaseDeployApplicationInsightsName="${{ env.AZURE_DATABASE_DEPLOY_APPLICATION_INSIGHTS_NAME }}" databaseDeployFunctionName="${{ env.AZURE_DATABASE_DEPLOY_FUNCTION_NAME }}"
 
+      - name: Set Environment Variables for created Azure Resources
+        run: |
+          echo "DATABASE_DEPLOY_URL=$(az functionapp show --name "${{ env.AZURE_DATABASE_DEPLOY_FUNCTION_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --query defaultHostName --output tsv)" >> $GITHUB_ENV
+          echo "DATABASE_DEPLOY_KEY=$(az functionapp function keys list --name "${{ env.AZURE_DATABASE_DEPLOY_FUNCTION_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --function-name "DeployFunction" --query default --output tsv)" >> $GITHUB_ENV
+          echo "DATABASE_SERVER_NAME=$(az sql server show --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --name "${{ env.AZURE_SERVER_NAME }}" --query "fullyQualifiedDomainName" --output tsv)"
+
       - name: Building Database Deploy Azure Function
         shell: pwsh
         run: |
@@ -49,5 +55,17 @@ jobs:
         uses: azure/functions-action@v1
         id: fa
         with:
-          app-name: fpl-league-tracker-database-deploy
+          app-name: ${{ env.AZURE_DATABASE_DEPLOY_FUNCTION_NAME }}
           package: './FPLV2.DatabaseDeploy/output'
+
+      - name: Execute Database Deploy Azure Function
+        shell: pwsh
+        run: |
+          $url="https://${{ env.DATABASE_DEPLOY_URL }}/api/DeployFunction?code=${{ env.DATABASE_DEPLOY_KEY }}"
+          $body= @{
+            serverName = "${{ env.DATABASE_SERVER_NAME }}"
+            databaseName = "${{ env.AZURE_DATABASE_NAME }}"
+            databaseUserName = "${{ vars.AZURE_DATABASE_USERNAME }}"
+            databasePassword = "${{ vars.AZURE_DATABASE_PASSWORD }}"
+          } | ConverTo-Json
+          Invoke-RestMethod -Uri $uri -Method Post -Body $body -ContentType "application/json"
