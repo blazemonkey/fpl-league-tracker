@@ -67,5 +67,5 @@ jobs:
             databaseName = "${{ env.AZURE_DATABASE_NAME }}"
             databaseUserName = "${{ vars.AZURE_DATABASE_USERNAME }}"
             databasePassword = "${{ vars.AZURE_DATABASE_PASSWORD }}"
-          } | ConverTo-Json
+          } | ConvertTo-Json
           Invoke-RestMethod -Uri $uri -Method Post -Body $body -ContentType "application/json"
