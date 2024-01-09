@@ -45,7 +45,7 @@ public class UpdateFunction : Function
         }
         catch (Exception ex)
         {
-            Logger.LogInformation($"UpdateFunction error occured: {ex}");
+            Logger.LogError($"UpdateFunction error occured: {ex}");
         }
         finally
         {
