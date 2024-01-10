@@ -1751,20 +1751,20 @@ public class BootstrapStaticTests : UpdaterTests
 
         var teams = await UnitOfWork.Teams.GetAll();
         Assert.AreEqual(1, teams.Length);
-
+        
         var elements = await UnitOfWork.Elements.GetAllByTeamId(teams[0].Id);
         Assert.AreEqual(2, elements.Length);
-        Assert.AreEqual(1, elements[0].TeamId);
+        Assert.AreEqual(teams[0].Id, elements[0].TeamId);
         Assert.AreEqual(13, elements[0].ElementId);
-        Assert.AreEqual(teams[0].Id, elements[0].ElementTeamId);
+        Assert.AreEqual(1, elements[0].ElementTeamId);
         Assert.AreEqual(Database.Models.ElementType.Midfielder, elements[0].ElementType);
         Assert.AreEqual("Bukayo", elements[0].FirstName);
         Assert.AreEqual("Saka", elements[0].SecondName);
         Assert.AreEqual("Saka", elements[0].WebName);
 
-        Assert.AreEqual(1, elements[1].TeamId);
+        Assert.AreEqual(teams[0].Id, elements[1].TeamId);
         Assert.AreEqual(313, elements[1].ElementId);
-        Assert.AreEqual(teams[0].Id, elements[1].ElementTeamId);
+        Assert.AreEqual(1, elements[1].ElementTeamId);
         Assert.AreEqual(Database.Models.ElementType.Defender, elements[1].ElementType);
         Assert.AreEqual("Oleksandr", elements[1].FirstName);
         Assert.AreEqual("Zinchenko", elements[1].SecondName);
@@ -1893,9 +1893,9 @@ public class BootstrapStaticTests : UpdaterTests
         Assert.AreEqual(1, teams.Length);
 
         elements = await UnitOfWork.Elements.GetAllByTeamId(teams[0].Id);
-        Assert.AreEqual(1, elements[0].TeamId);
+        Assert.AreEqual(teams[0].Id, elements[0].TeamId);
         Assert.AreEqual(313, elements[0].ElementId);
-        Assert.AreEqual(teams[0].Id, elements[0].ElementTeamId);
+        Assert.AreEqual(1, elements[0].ElementTeamId);
         Assert.AreEqual(Database.Models.ElementType.Defender, elements[0].ElementType);
         Assert.AreEqual("Oleksandr", elements[0].FirstName);
         Assert.AreEqual("Zinchenko", elements[0].SecondName);
