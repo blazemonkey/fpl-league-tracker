@@ -87,6 +87,7 @@ jobs:
           echo "DATABASE_DEPLOY_KEY=$(az functionapp function keys list --name "${{ env.AZURE_DATABASE_DEPLOY_FUNCTION_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --function-name "DeployFunction" --query default --output tsv)" >> $GITHUB_ENV
           echo "DATABASE_SERVER_NAME=$(az sql server show --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --name "${{ env.AZURE_SERVER_NAME }}" --query "fullyQualifiedDomainName" --output tsv)" >> $GITHUB_ENV
           connectionString=$(az sql db show-connection-string --name "${{ env.AZURE_DATABASE_NAME }}" --server "${{ env.AZURE_SERVER_NAME }}" --client ado.net --output tsv)
+          connectionString="$(<<< "$connectionString" sed -e 's`[][\\/.*^$]`\\&`g')"
           updatedConnectionString=$(echo "$connectionString" | sed 's/<username>/${{ vars.AZURE_DATABASE_USERNAME }}/;s/<password>/${{ secrets.AZURE_DATABASE_PASSWORD }}/')
           echo "DATABASE_CONNECTION_STRING=$updatedConnectionString" >> $GITHUB_ENV
 
@@ -104,4 +105,4 @@ jobs:
       
       - name: Update Environment Variables for Updater Azure Function
         run: |
-          az functionapp config appsettings set --name "${{ env.AZURE_UPDATER_FUNCTION_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --settings "ConnectionStrings_DefaultConnection=${{ env.DATABASE_CONNECTION_STRING }}"
+          az functionapp config appsettings set --name "${{ env.AZURE_UPDATER_FUNCTION_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --settings "ConnectionStrings:DefaultConnection=${{ env.DATABASE_CONNECTION_STRING }}"
