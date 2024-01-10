@@ -49,6 +49,18 @@
             "metadata": {
                 "description": "The name of the Database Deploy Azure Function."
             }
+        },
+        "updaterApplicationInsightsName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the Application Insights for the Updater Azure Function."
+            }
+        },
+        "updaterFunctionName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the Updater Azure Function."
+            }
         }
     },
     "resources": [
@@ -142,6 +154,67 @@
                   {
                     "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                     "value": "[reference(resourceId('Microsoft.Insights/components', parameters('databaseDeployApplicationInsightsName')), '2020-02-02').InstrumentationKey]"
+                  },
+                  {
+					"name": "AzureWebJobsStorage",
+					"value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';EndpointSuffix=', environment().suffixes.storage, ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')),'2017-06-01').keys[0].value)]"
+				  },                  
+                  {
+                    "name": "FUNCTIONS_WORKER_RUNTIME",
+                    "value": "dotnet-isolated"
+                  },
+                  {
+                    "name": "FUNCTIONS_EXTENSION_VERSION",
+                    "value": "~4"        
+                  },
+                  {
+                    "name": "WEBSITE_RUN_FROM_PACKAGE",
+                    "value": "1"
+                  }
+                ],
+                "netFrameworkVersion": "v7.0"
+              },
+              "httpsOnly": true
+            }
+        },
+        {
+            "type": "Microsoft.Insights/components",
+            "apiVersion": "2020-02-02",
+            "name": "[parameters('updaterApplicationInsightsName')]",
+            "location": "[parameters('location')]",
+            "kind": "web",
+            "properties": {
+              "Application_Type": "web",
+              "Request_Source": "rest"
+            }
+        },        
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2021-03-01",
+            "name": "[parameters('updaterFunctionName')]",
+            "location": "[parameters('location')]",
+            "kind": "windows",
+            "sku": {
+              "name": "Y1",
+              "tier": "Dynamic"
+            },
+            "properties": {
+                "reserved": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2021-03-01",
+            "name": "[parameters('updaterFunctionName')]",
+            "location": "[parameters('location')]",
+            "kind": "functionapp",
+            "properties": {
+              "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('updaterFunctionName'))]",
+              "siteConfig": {
+                "appSettings": [
+                  {
+                    "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                    "value": "[reference(resourceId('Microsoft.Insights/components', parameters('updaterApplicationInsightsName')), '2020-02-02').InstrumentationKey]"
                   },
                   {
 					"name": "AzureWebJobsStorage",
