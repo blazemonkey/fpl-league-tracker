@@ -86,7 +86,9 @@ jobs:
           echo "DATABASE_DEPLOY_URL=$(az functionapp show --name "${{ env.AZURE_DATABASE_DEPLOY_FUNCTION_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --query defaultHostName --output tsv)" >> $GITHUB_ENV
           echo "DATABASE_DEPLOY_KEY=$(az functionapp function keys list --name "${{ env.AZURE_DATABASE_DEPLOY_FUNCTION_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --function-name "DeployFunction" --query default --output tsv)" >> $GITHUB_ENV
           echo "DATABASE_SERVER_NAME=$(az sql server show --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --name "${{ env.AZURE_SERVER_NAME }}" --query "fullyQualifiedDomainName" --output tsv)" >> $GITHUB_ENV
-          echo "DATABASE_CONNECTION_STRING=$(az sql db show-connection-string --name "${{ env.AZURE_DATABASE_NAME }}" --server "${{ env.AZURE_SERVER_NAME }}" --client ado.net --output tsv)" >> $GITHUB_ENV
+          connectionString=$(az sql db show-connection-string --name "${{ env.AZURE_DATABASE_NAME }}" --server "${{ env.AZURE_SERVER_NAME }}" --client ado.net --output tsv)
+          updatedConnectionString=$(echo "$connectionString" | sed 's/<username>/${{ vars.AZURE_DATABASE_USERNAME }}/')
+          echo "DATABASE_CONNECTION_STRING=$updatedConnectionString" >> $GITHUB_ENV
 
       - name: Execute Database Deploy Azure Function
         shell: pwsh
