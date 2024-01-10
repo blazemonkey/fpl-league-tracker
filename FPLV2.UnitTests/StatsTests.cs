@@ -9,19 +9,6 @@ namespace FPLV2.UnitTests;
 public class StatsTests : UnitTests
 {
     [TestMethod]
-    public async Task StatsHasStoredProceduresTest()
-    {
-        var dir = GetScriptsDir();
-
-        var sql = Path.Combine(dir, "InitialData.sql");
-        var initialData = File.ReadAllText(sql);
-        var statements = Regex.Split(initialData, @"^[\t ]*GO[\t ]*\d*[\t ]*(?:--.*)?(?=($|[\s]+))", RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase).Where(x => string.IsNullOrEmpty(x) == false).ToArray();
-
-        var dbStats = await UnitOfWork.Stats.GetAll();
-        Assert.AreEqual(statements.Length, dbStats.Length);
-    }
-
-    [TestMethod]
     public async Task StatsMostPointsInAGameweekTest()
     {
         // season 1

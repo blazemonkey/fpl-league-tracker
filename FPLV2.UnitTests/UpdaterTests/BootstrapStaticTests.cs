@@ -938,7 +938,7 @@ public class BootstrapStaticTests : UpdaterTests
         Assert.AreEqual(teams[0].Id, elements[0].TeamId);
         Assert.AreEqual(13, elements[0].ElementId);
         Assert.AreEqual(1, elements[0].ElementTeamId);
-        Assert.AreEqual(3, elements[0].ElementType);
+        Assert.AreEqual(Database.Models.ElementType.Midfielder, elements[0].ElementType);
         Assert.AreEqual("Bukayo", elements[0].FirstName);
         Assert.AreEqual("Saka", elements[0].SecondName);
         Assert.AreEqual("Saka", elements[0].WebName);
@@ -946,7 +946,7 @@ public class BootstrapStaticTests : UpdaterTests
         Assert.AreEqual(teams[0].Id, elements[1].TeamId);
         Assert.AreEqual(313, elements[1].ElementId);
         Assert.AreEqual(1, elements[1].ElementTeamId);
-        Assert.AreEqual(2, elements[1].ElementType);
+        Assert.AreEqual(Database.Models.ElementType.Defender, elements[1].ElementType);
         Assert.AreEqual("Oleksandr", elements[1].FirstName);
         Assert.AreEqual("Zinchenko", elements[1].SecondName);
         Assert.AreEqual("Zinchenko", elements[1].WebName);
@@ -1259,7 +1259,7 @@ public class BootstrapStaticTests : UpdaterTests
         Assert.AreEqual(teams[0].Id, elements[0].TeamId);
         Assert.AreEqual(13, elements[0].ElementId);
         Assert.AreEqual(1, elements[0].ElementTeamId);
-        Assert.AreEqual(3, elements[0].ElementType);
+        Assert.AreEqual(Database.Models.ElementType.Midfielder, elements[0].ElementType);
         Assert.AreEqual("Bukayo", elements[0].FirstName);
         Assert.AreEqual("Saka", elements[0].SecondName);
         Assert.AreEqual("Saka", elements[0].WebName);
@@ -1267,7 +1267,7 @@ public class BootstrapStaticTests : UpdaterTests
         Assert.AreEqual(teams[0].Id, elements[1].TeamId);
         Assert.AreEqual(313, elements[1].ElementId);
         Assert.AreEqual(1, elements[1].ElementTeamId);
-        Assert.AreEqual(2, elements[1].ElementType);
+        Assert.AreEqual(Database.Models.ElementType.Defender, elements[1].ElementType);
         Assert.AreEqual("Oleksandr", elements[1].FirstName);
         Assert.AreEqual("Zinchenko", elements[1].SecondName);
         Assert.AreEqual("Zinchenko", elements[1].WebName);
@@ -1275,7 +1275,7 @@ public class BootstrapStaticTests : UpdaterTests
         Assert.AreEqual(teams[0].Id, elements[2].TeamId);
         Assert.AreEqual(19, elements[2].ElementId);
         Assert.AreEqual(1, elements[2].ElementTeamId);
-        Assert.AreEqual(3, elements[2].ElementType);
+        Assert.AreEqual(Database.Models.ElementType.Midfielder, elements[2].ElementType);
         Assert.AreEqual("Gabriel", elements[2].FirstName);
         Assert.AreEqual("Martinelli Silva", elements[2].SecondName);
         Assert.AreEqual("Martinelli", elements[2].WebName);
@@ -1501,7 +1501,7 @@ public class BootstrapStaticTests : UpdaterTests
         Assert.AreEqual(teams[0].Id, elements[0].TeamId);
         Assert.AreEqual(13, elements[0].ElementId);
         Assert.AreEqual(1, elements[0].ElementTeamId);
-        Assert.AreEqual(3, elements[0].ElementType);
+        Assert.AreEqual(Database.Models.ElementType.Midfielder, elements[0].ElementType);
         Assert.AreEqual("Bukayo", elements[0].FirstName);
         Assert.AreEqual("Saka", elements[0].SecondName);
         Assert.AreEqual("Saka", elements[0].WebName);
@@ -1509,7 +1509,7 @@ public class BootstrapStaticTests : UpdaterTests
         Assert.AreEqual(teams[0].Id, elements[1].TeamId);
         Assert.AreEqual(313, elements[1].ElementId);
         Assert.AreEqual(1, elements[1].ElementTeamId);
-        Assert.AreEqual(2, elements[1].ElementType);
+        Assert.AreEqual(Database.Models.ElementType.Defender, elements[1].ElementType);
         Assert.AreEqual("Oleksandr", elements[1].FirstName);
         Assert.AreEqual("Zinchenko", elements[1].SecondName);
         Assert.AreEqual("Zinchenko", elements[1].WebName);
@@ -1522,7 +1522,7 @@ public class BootstrapStaticTests : UpdaterTests
         Assert.AreEqual(teams[0].Id, elements[0].TeamId);
         Assert.AreEqual(13, elements[0].ElementId);
         Assert.AreEqual(1, elements[0].ElementTeamId);
-        Assert.AreEqual(3, elements[0].ElementType);
+        Assert.AreEqual(Database.Models.ElementType.Midfielder, elements[0].ElementType);
         Assert.AreEqual("Bukayo", elements[0].FirstName);
         Assert.AreEqual("Saka", elements[0].SecondName);
         Assert.AreEqual("Saka", elements[0].WebName);
@@ -1530,7 +1530,7 @@ public class BootstrapStaticTests : UpdaterTests
         Assert.AreEqual(teams[0].Id, elements[1].TeamId);
         Assert.AreEqual(313, elements[1].ElementId);
         Assert.AreEqual(1, elements[1].ElementTeamId);
-        Assert.AreEqual(2, elements[1].ElementType);
+        Assert.AreEqual(Database.Models.ElementType.Defender, elements[1].ElementType);
         Assert.AreEqual("Oleksandr", elements[1].FirstName);
         Assert.AreEqual("Zinchenko", elements[1].SecondName);
         Assert.AreEqual("Zinchenko", elements[1].WebName);
@@ -1757,7 +1757,7 @@ public class BootstrapStaticTests : UpdaterTests
         Assert.AreEqual(1, elements[0].TeamId);
         Assert.AreEqual(13, elements[0].ElementId);
         Assert.AreEqual(teams[0].Id, elements[0].ElementTeamId);
-        Assert.AreEqual(3, elements[0].ElementType);
+        Assert.AreEqual(Database.Models.ElementType.Midfielder, elements[0].ElementType);
         Assert.AreEqual("Bukayo", elements[0].FirstName);
         Assert.AreEqual("Saka", elements[0].SecondName);
         Assert.AreEqual("Saka", elements[0].WebName);
@@ -1765,7 +1765,7 @@ public class BootstrapStaticTests : UpdaterTests
         Assert.AreEqual(1, elements[1].TeamId);
         Assert.AreEqual(313, elements[1].ElementId);
         Assert.AreEqual(teams[0].Id, elements[1].ElementTeamId);
-        Assert.AreEqual(2, elements[1].ElementType);
+        Assert.AreEqual(Database.Models.ElementType.Defender, elements[1].ElementType);
         Assert.AreEqual("Oleksandr", elements[1].FirstName);
         Assert.AreEqual("Zinchenko", elements[1].SecondName);
         Assert.AreEqual("Zinchenko", elements[1].WebName);
@@ -1896,7 +1896,7 @@ public class BootstrapStaticTests : UpdaterTests
         Assert.AreEqual(1, elements[0].TeamId);
         Assert.AreEqual(313, elements[0].ElementId);
         Assert.AreEqual(teams[0].Id, elements[0].ElementTeamId);
-        Assert.AreEqual(2, elements[0].ElementType);
+        Assert.AreEqual(Database.Models.ElementType.Defender, elements[0].ElementType);
         Assert.AreEqual("Oleksandr", elements[0].FirstName);
         Assert.AreEqual("Zinchenko", elements[0].SecondName);
         Assert.AreEqual("Zinchenko", elements[0].WebName);
@@ -1929,7 +1929,7 @@ public class BootstrapStaticTests : UpdaterTests
         Assert.AreEqual(element.SecondName, dbElement.SecondName);
         Assert.AreEqual(element.WebName, dbElement.WebName);
         Assert.AreEqual(element.Code, dbElement.Code);
-        Assert.AreEqual(element.ElementType, dbElement.ElementType);
+        Assert.AreEqual(element.ElementType, (int)dbElement.ElementType);
         Assert.AreEqual(teamId, dbElement.TeamId);
         Assert.AreEqual(element.Team, dbElement.ElementTeamId);
     }
