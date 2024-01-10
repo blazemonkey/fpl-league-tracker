@@ -21,7 +21,9 @@ namespace FPLV2.UnitTests
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", false, false)
+#if DEBUG
                 .AddJsonFile("appsettings.Development.json", true, false)
+#endif
                 .AddEnvironmentVariables()
                 .Build();
 
