@@ -31,7 +31,7 @@ jobs:
           chmod +x SqlLocalDB.msi
           Start-Process -FilePath "SqlLocalDB.msi" -Wait -ArgumentList "/qn", "/norestart", "/l*v SqlLocalDBInstall.log", "IACCEPTSQLLOCALDBLICENSETERMS=YES";
           Write-Host "Checking"
-          sqlcmd -l 60 -S "(localdb)\MSSQLLocalDB" -Q "SELECT @@VERSION;"
+          sqlcmd -l 300 -S "(localdb)\MSSQLLocalDB" -Q "SELECT @@VERSION;"
 
       - name: Run Unit Tests
         shell: pwsh
