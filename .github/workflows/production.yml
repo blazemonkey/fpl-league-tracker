@@ -37,7 +37,7 @@ jobs:
         shell: pwsh
         run: |
           pushd './FPLV2.UnitTests'
-          dotnet test -logger "console;verbosity=normal" --configuration Release
+          dotnet test --logger "console;verbosity=normal" --configuration Release
           popd
 
 
