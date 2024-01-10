@@ -86,6 +86,7 @@ jobs:
           echo "DATABASE_DEPLOY_URL=$(az functionapp show --name "${{ env.AZURE_DATABASE_DEPLOY_FUNCTION_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --query defaultHostName --output tsv)" >> $GITHUB_ENV
           echo "DATABASE_DEPLOY_KEY=$(az functionapp function keys list --name "${{ env.AZURE_DATABASE_DEPLOY_FUNCTION_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --function-name "DeployFunction" --query default --output tsv)" >> $GITHUB_ENV
           echo "DATABASE_SERVER_NAME=$(az sql server show --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --name "${{ env.AZURE_SERVER_NAME }}" --query "fullyQualifiedDomainName" --output tsv)" >> $GITHUB_ENV
+          echo "DATABASE_CONNECTION_STRING=$(az sql db show-connection-string --name "${{ env.AZURE_DATABASE_NAME }}" --server "${{ env.AZURE_SERVER_NAME }}" --client ado.net --output tsv)" >> $GITHUB_ENV
 
       - name: Execute Database Deploy Azure Function
         shell: pwsh
@@ -98,3 +99,7 @@ jobs:
             databaseAdminPassword = "${{ secrets.AZURE_DATABASE_PASSWORD }}"
           } | ConvertTo-Json
           Invoke-RestMethod -Uri $url -Method Post -Body $body -ContentType "application/json"
+      
+      - name: Update Environment Variables for Updater Azure Function
+        run: |
+          az functionapp config appsettings set --name "${{ env.AZURE_UPDATER_FUNCTION_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --settings "ConnectionString=${{ env.DATABASE_CONNECTION_STRING }}"
