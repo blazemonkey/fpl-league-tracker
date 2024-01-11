@@ -77,7 +77,6 @@ jobs:
       
       - name: Updating Database Deploy Azure Function
         uses: azure/functions-action@v1
-        id: fa
         with:
           app-name: ${{ env.AZURE_DATABASE_DEPLOY_FUNCTION_NAME }}
           package: './FPLV2.DatabaseDeploy/output'
@@ -118,7 +117,6 @@ jobs:
       
       - name: Updating Updater Azure Function
         uses: azure/functions-action@v1
-        id: fa
         with:
           app-name: ${{ env.AZURE_UPDATER_FUNCTION_NAME }}
           package: './FPLV2.Updater/output'          
