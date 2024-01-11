@@ -15,7 +15,8 @@ env:
   AZURE_DATABASE_DEPLOY_FUNCTION_NAME: 'fpl-league-tracker-database-deploy'
   AZURE_UPDATER_APPLICATION_INSIGHTS_NAME: 'fpl-league-tracker-updater-insights'
   AZURE_UPDATER_FUNCTION_NAME: 'fpl-league-tracker-updater'
-
+  FPL_BASE_URL: 'https://fantasy.premierleague.com/api/'
+  
 jobs:
   build-and-test:
     runs-on: windows-latest
@@ -106,4 +107,5 @@ jobs:
       
       - name: Update Environment Variables for Updater Azure Function
         run: |
-          az functionapp config appsettings set --name "${{ env.AZURE_UPDATER_FUNCTION_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --settings "ConnectionStrings:DefaultConnection=${{ env.DATABASE_CONNECTION_STRING }}"
+          az webapp config connection-string set --name "${{ env.AZURE_UPDATER_FUNCTION_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --connection-string-type SQLAzure --settings DefaultConnection="${{ env.DATABASE_CONNECTION_STRING }}"
+          az functionapp config appsettings set --name "${{ env.AZURE_UPDATER_FUNCTION_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --settings "FplBaseUrl={{ env.FPL_BASE)URL }}"
