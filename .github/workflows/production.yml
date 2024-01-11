@@ -87,15 +87,10 @@ jobs:
           echo "DATABASE_DEPLOY_KEY=$(az functionapp function keys list --name "${{ env.AZURE_DATABASE_DEPLOY_FUNCTION_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --function-name "DeployFunction" --query default --output tsv)" >> $GITHUB_ENV
           echo "DATABASE_SERVER_NAME=$(az sql server show --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --name "${{ env.AZURE_SERVER_NAME }}" --query "fullyQualifiedDomainName" --output tsv)" >> $GITHUB_ENV
           connectionString=$(az sql db show-connection-string --name "${{ env.AZURE_DATABASE_NAME }}" --server "${{ env.AZURE_SERVER_NAME }}" --client ado.net --output tsv)
-          escapedUserName="$(<<< "${{ vars.AZURE_DATABASE_USERNAME }}" sed -e 's`[][\\/.*^$]`\\&`g')"
-          escapedPassword="$(<<< "${{ secrets.AZURE_DATABASE_PASSWORD }}" sed -e 's`[][\\/.*^$]`\\&`g')"
-          escapedTest="$(<<< "hello&FPL" sed -e 's`[][\\/.*^$]`\\&`g')"
-          echo $escapedUserName
-          echo $escapedPassword
-          echo $escapedTest
-          updatedConnectionString=$(echo "$connectionString" | sed "s/<username>/$escapedUserName/;s/<password>/$escapedPassword/")
-          echo $updatedConnectionString
-          echo "DATABASE_CONNECTION_STRING=$updatedConnectionString" >> $GITHUB_ENV
+          connectionString="${connectionString/<username>/${{ vars.AZURE_DATABASE_USERNAME }}}" 
+          connectionString="${connectionString/<password>/${{ secrets.AZURE_DATABASE_PASSWORD }}}"
+          echo $connectionString
+          echo "DATABASE_CONNECTION_STRING=$connectionString" >> $GITHUB_ENV
 
       - name: Execute Database Deploy Azure Function
         shell: pwsh
