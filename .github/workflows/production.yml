@@ -91,7 +91,7 @@ jobs:
           escapedPassword="$(<<< "${{ secrets.AZURE_DATABASE_PASSWORD }}" sed -e 's`[][\\/.*^$]`\\&`g')"
           echo $escapedUserName
           echo $escapedPassword
-          updatedConnectionString=$(echo "$connectionString" | sed 's/<username>/$(echo "$escapedUserName")/;s/<password>/$(echo "$escapedPassword")/')
+          updatedConnectionString=$(echo "$connectionString" | sed 's/<username>/$escapedUserName/;s/<password>/$escapedPassword/')
           echo $updatedConnectionString
           echo "DATABASE_CONNECTION_STRING=$updatedConnectionString" >> $GITHUB_ENV
 
