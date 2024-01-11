@@ -39,7 +39,7 @@ public class LeagueSearchUpdateFunction : Function
                 throw new Exception("Could not get data");
 
             // update seasons
-            var seasonId = await UpdateSeasons(result);
+            var seasonId = await GetSeasonId(result);
             if (seasonId == 0)
                 throw new Exception("Could not get the SeasonId");
 
@@ -61,7 +61,7 @@ public class LeagueSearchUpdateFunction : Function
         }
         catch (Exception ex)
         {
-            Logger.LogInformation($"LeagueSearchUpdateFunction error occured: {ex}");
+            Logger.LogError($"LeagueSearchUpdateFunction error occured: {ex}");
         }
         finally
         {
@@ -97,18 +97,18 @@ public class LeagueSearchUpdateFunction : Function
 
             return leagueSearch;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return null;
         }
     }
 
     /// <summary>
-    /// Inserts the Season into the database if it doesn't exist yet
+    /// Get the SeasonId from the database. It is expected that this exists already (added from the UpdateFunction), if it doesn't it will not attempt to add it
     /// </summary>
     /// <param name="result">The Id of the Season</param>
     /// <returns>Season Id</returns>
-    private async Task<int> UpdateSeasons(BootstrapStatic result)
+    private async Task<int> GetSeasonId(BootstrapStatic result)
     {
         var openingDate = result.Gameweeks?.FirstOrDefault()?.DeadlineTime ?? DateTime.MinValue;
         var finalDate = result.Gameweeks?.LastOrDefault()?.DeadlineTime ?? DateTime.MinValue;
@@ -118,10 +118,7 @@ public class LeagueSearchUpdateFunction : Function
         var seasonYear = $"{openingDate.Year}/{finalDate.Year.ToString().Substring(2, 2)}"; // e.g. 2020/21
         var dbSeasons = await UnitOfWork.Seasons.GetAll();
 
-        var seasonId = dbSeasons.FirstOrDefault(x => x.Year == seasonYear)?.Id ?? 0;
-        if (seasonId == 0)
-            seasonId = await UnitOfWork.Seasons.Insert(new Database.Models.Season() { Year = seasonYear });
-
+        var seasonId = dbSeasons.FirstOrDefault(x => x.Year == seasonYear)?.Id ?? 0;      
         return seasonId;
     }
 }
