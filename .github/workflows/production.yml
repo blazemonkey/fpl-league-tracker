@@ -90,7 +90,6 @@ jobs:
           connectionString=$(az sql db show-connection-string --name "${{ env.AZURE_DATABASE_NAME }}" --server "${{ env.AZURE_SERVER_NAME }}" --client ado.net --output tsv)
           connectionString="${connectionString/<username>/${{ vars.AZURE_DATABASE_USERNAME }}}" 
           connectionString="${connectionString/<password>/${{ secrets.AZURE_DATABASE_PASSWORD }}}"
-          echo $connectionString
           echo "DATABASE_CONNECTION_STRING=$connectionString" >> $GITHUB_ENV
 
       - name: Execute Database Deploy Azure Function
@@ -108,4 +107,18 @@ jobs:
       - name: Update Environment Variables for Updater Azure Function
         run: |
           az webapp config connection-string set --name "${{ env.AZURE_UPDATER_FUNCTION_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --connection-string-type SQLAzure --settings DefaultConnection="${{ env.DATABASE_CONNECTION_STRING }}"
-          az functionapp config appsettings set --name "${{ env.AZURE_UPDATER_FUNCTION_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --settings "FplBaseUrl={{ env.FPL_BASE)URL }}"
+          az functionapp config appsettings set --name "${{ env.AZURE_UPDATER_FUNCTION_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --settings "FplBaseUrl=${{ env.FPL_BASE_URL }}"
+
+      - name: Building Updater Azure Function
+        shell: pwsh
+        run: |
+          pushd './FPLV2.Updater'
+          dotnet build --configuration Release --output ./output
+          popd
+      
+      - name: Updating Updater Azure Function
+        uses: azure/functions-action@v1
+        id: fa
+        with:
+          app-name: ${{ env.AZURE_UPDATER_FUNCTION_NAME }}
+          package: './FPLV2.Updater/output'          
