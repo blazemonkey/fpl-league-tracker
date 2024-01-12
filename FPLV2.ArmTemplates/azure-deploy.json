@@ -38,10 +38,10 @@
         "description": "The name of the Storage Account."
       }
     },
-    "planName": {
+    "functionPlanName": {
       "type": "string",
       "metadata": {
-        "description": "The name of the App Service Plans all resources will use."
+        "description": "The name of the App Service Plans that Azure Functions will use."
       }
     },
     "databaseDeployFunctionName": {
@@ -130,7 +130,7 @@
     {
       "type": "Microsoft.Web/serverfarms",
       "apiVersion": "2021-03-01",
-      "name": "[parameters('planName')]",
+      "name": "[parameters('functionPlanName')]",
       "location": "[parameters('location')]",
       "kind": "windows",
       "sku": {
@@ -148,7 +148,7 @@
       "location": "[parameters('location')]",
       "kind": "functionapp",
       "properties": {
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('planName'))]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('functionPlanName'))]",
         "siteConfig": {
           "appSettings": [
             {
@@ -195,7 +195,7 @@
       "location": "[parameters('location')]",
       "kind": "functionapp",
       "properties": {
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('planName'))]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('functionPlanName'))]",
         "siteConfig": {
           "appSettings": [
             {
@@ -236,12 +236,25 @@
       }
     },    
     {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2021-03-01",
+      "name": "[parameters('apiName')]",
+      "location": "[parameters('location')]",
+      "kind": "windows",
+      "sku": {
+        "name": "B1"
+      },
+      "properties": {
+        "reserved": false
+      }
+    },    
+    {
       "type": "Microsoft.Web/sites",
       "apiVersion": "2021-03-01",
       "name": "[parameters('apiName')]",
       "location": "[parameters('location')]",
       "properties": {
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('planName'))]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('apiName'))]",
         "siteConfig": {
           "appSettings": [
             {
