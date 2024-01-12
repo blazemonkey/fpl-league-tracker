@@ -66,7 +66,7 @@ jobs:
         with:
           resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
           template: ./FPLV2.ArmTemplates/azure-deploy.json
-          parameters: serverName="${{ env.AZURE_SERVER_NAME }}" sqlDBName="${{ env.AZURE_DATABASE_NAME }}" location="${{ env.AZURE_LOCATION }}" administratorLogin="${{ vars.AZURE_DATABASE_USERNAME }}" administratorLoginPassword="${{ secrets.AZURE_DATABASE_PASSWORD }}" storageAccountName="${{ env.AZURE_STORAGE_ACCOUNT_NAME }}" planName="${{ env.AZURE_PLAN_NAME }}" databaseDeployFunctionName="${{ env.AZURE_DATABASE_DEPLOY_FUNCTION_NAME }}" updaterFunctionName="${{ env.AZURE_UPDATER_FUNCTION_NAME }}"
+          parameters: serverName="${{ env.AZURE_SERVER_NAME }}" sqlDBName="${{ env.AZURE_DATABASE_NAME }}" location="${{ env.AZURE_LOCATION }}" administratorLogin="${{ vars.AZURE_DATABASE_USERNAME }}" administratorLoginPassword="${{ secrets.AZURE_DATABASE_PASSWORD }}" storageAccountName="${{ env.AZURE_STORAGE_ACCOUNT_NAME }}" planName="${{ env.AZURE_PLAN_NAME }}" databaseDeployFunctionName="${{ env.AZURE_DATABASE_DEPLOY_FUNCTION_NAME }}" updaterFunctionName="${{ env.AZURE_UPDATER_FUNCTION_NAME }}" apiName="${{ env.AZURE_API_NAME }}"
 
       - name: Building Database Deploy Azure Function
         shell: pwsh
