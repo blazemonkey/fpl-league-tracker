@@ -120,3 +120,16 @@ jobs:
         with:
           app-name: ${{ env.AZURE_UPDATER_FUNCTION_NAME }}
           package: './FPLV2.Updater/output'          
+          
+      - name: Building API Web App
+        shell: pwsh
+        run: |
+          pushd './FPLV2.Api'
+          dotnet build --configuration Release --output ./output
+          popd
+
+      - name: Updating API Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_API_NAME }}
+          package: './FPLV2.Api/output'          
