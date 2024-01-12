@@ -11,10 +11,10 @@ env:
   AZURE_SERVER_NAME: 'fpl-league-tracker'
   AZURE_DATABASE_NAME: 'FPL'
   AZURE_STORAGE_ACCOUNT_NAME: 'fplleaguetrackerstorage'
-  AZURE_DATABASE_DEPLOY_APPLICATION_INSIGHTS_NAME: 'fpl-league-tracker-database-deploy-insights'
+  AZURE_PLAN_NAME: 'fpl-league-tracker-plan'
   AZURE_DATABASE_DEPLOY_FUNCTION_NAME: 'fpl-league-tracker-database-deploy'
-  AZURE_UPDATER_APPLICATION_INSIGHTS_NAME: 'fpl-league-tracker-updater-insights'
   AZURE_UPDATER_FUNCTION_NAME: 'fpl-league-tracker-updater'
+  AZURE_API_NAME: 'fpl-league-tracker-api'
   FPL_BASE_URL: 'https://fantasy.premierleague.com/api/'
   
 jobs:
@@ -66,7 +66,7 @@ jobs:
         with:
           resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
           template: ./FPLV2.ArmTemplates/azure-deploy.json
-          parameters: serverName="${{ env.AZURE_SERVER_NAME }}" sqlDBName="${{ env.AZURE_DATABASE_NAME }}" location="${{ env.AZURE_LOCATION }}" administratorLogin="${{ vars.AZURE_DATABASE_USERNAME }}" administratorLoginPassword="${{ secrets.AZURE_DATABASE_PASSWORD }}" storageAccountName="${{ env.AZURE_STORAGE_ACCOUNT_NAME }}" databaseDeployApplicationInsightsName="${{ env.AZURE_DATABASE_DEPLOY_APPLICATION_INSIGHTS_NAME }}" databaseDeployFunctionName="${{ env.AZURE_DATABASE_DEPLOY_FUNCTION_NAME }}" updaterApplicationInsightsName="${{ env.AZURE_UPDATER_APPLICATION_INSIGHTS_NAME }}" updaterFunctionName="${{ env.AZURE_UPDATER_FUNCTION_NAME }}"
+          parameters: serverName="${{ env.AZURE_SERVER_NAME }}" sqlDBName="${{ env.AZURE_DATABASE_NAME }}" location="${{ env.AZURE_LOCATION }}" administratorLogin="${{ vars.AZURE_DATABASE_USERNAME }}" administratorLoginPassword="${{ secrets.AZURE_DATABASE_PASSWORD }}" storageAccountName="${{ env.AZURE_STORAGE_ACCOUNT_NAME }}" planName="${{ env.AZURE_PLAN_NAME }}" databaseDeployFunctionName="${{ env.AZURE_DATABASE_DEPLOY_FUNCTION_NAME }}" updaterFunctionName="${{ env.AZURE_UPDATER_FUNCTION_NAME }}"
 
       - name: Building Database Deploy Azure Function
         shell: pwsh

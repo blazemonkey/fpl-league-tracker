@@ -8,7 +8,6 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["FPLV2.Api/FPLV2.Api.csproj", "FPLV2.Api/"]
-COPY ["FPLV2.Database/FPLV2.Database.csproj", "FPLV2.Database/"]
 RUN dotnet restore "FPLV2.Api/FPLV2.Api.csproj"
 COPY . .
 WORKDIR "/src/FPLV2.Api"

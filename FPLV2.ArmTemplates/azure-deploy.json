@@ -1,242 +1,228 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "serverName": {
-            "type": "string",
-            "metadata": {
-                "description": "The name of the SQL logical server."
-            }
-        },
-        "sqlDBName": {
-            "type": "string",
-            "metadata": {
-                "description": "The name of the SQL Database."
-            }
-        },
-        "location": {
-            "type": "string",
-            "metadata": {
-                "description": "Location for all resources."
-            }
-        },
-        "administratorLogin": {
-            "type": "string",
-            "metadata": {
-                "description": "The administrator username of the SQL logical server."
-            }
-        },
-        "administratorLoginPassword": {
-            "type": "securestring",
-            "metadata": {
-                "description": "The administrator password of the SQL logical server."
-            }
-        },
-        "storageAccountName": {
-            "type": "string",
-            "metadata": {
-                "description": "The name of the Storage Account."
-            }
-        },
-        "databaseDeployApplicationInsightsName": {
-            "type": "string",
-            "metadata": {
-                "description": "The name of the Application Insights for the Database Deploy Azure Function."
-            }
-        },
-        "databaseDeployFunctionName": {
-            "type": "string",
-            "metadata": {
-                "description": "The name of the Database Deploy Azure Function."
-            }
-        },
-        "updaterApplicationInsightsName": {
-            "type": "string",
-            "metadata": {
-                "description": "The name of the Application Insights for the Updater Azure Function."
-            }
-        },
-        "updaterFunctionName": {
-            "type": "string",
-            "metadata": {
-                "description": "The name of the Updater Azure Function."
-            }
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "serverName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the SQL logical server."
+      }
     },
-    "resources": [
+    "sqlDBName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the SQL Database."
+      }
+    },
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    },
+    "administratorLogin": {
+      "type": "string",
+      "metadata": {
+        "description": "The administrator username of the SQL logical server."
+      }
+    },
+    "administratorLoginPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "The administrator password of the SQL logical server."
+      }
+    },
+    "storageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Storage Account."
+      }
+    },
+    "planName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the App Service Plans all resources will use."
+      }
+    },
+    "databaseDeployFunctionName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Database Deploy Azure Function."
+      }
+    },
+    "updaterFunctionName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Updater Azure Function."
+      }
+    },
+    "apiName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the API Web App."
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Sql/servers",
+      "apiVersion": "2022-05-01-preview",
+      "name": "[parameters('serverName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "administratorLogin": "[parameters('administratorLogin')]",
+        "administratorLoginPassword": "[parameters('administratorLoginPassword')]"
+      },
+      "resources": [
         {
-            "type": "Microsoft.Sql/servers",
-            "apiVersion": "2022-05-01-preview",
-            "name": "[parameters('serverName')]",
-            "location": "[parameters('location')]",
-            "properties": {
-                "administratorLogin": "[parameters('administratorLogin')]",
-                "administratorLoginPassword": "[parameters('administratorLoginPassword')]"
-            },
-            "resources": [
-                {
-                    "type": "firewallrules",
-                    "apiVersion": "2022-05-01-preview",
-                    "name": "AllowAzureResources",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Sql/servers', concat(parameters('serverName')))]"
-                    ],
-                    "location": "[parameters('location')]",
-                    "properties": {
-                        "endIpAddress": "0.0.0.0",
-                        "startIpAddress": "0.0.0.0"
-                    }
-                },
-                {
-                    "type": "databases",
-                    "apiVersion": "2022-05-01-preview",
-                    "name": "[parameters('sqlDBName')]",
-                    "location": "[parameters('location')]",
-                    "sku": {
-                        "name": "Basic",
-                        "tier": "Basic"
-                    },
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Sql/servers', concat(parameters('serverName')))]"
-                    ]
-                }
-            ]
+          "type": "firewallrules",
+          "apiVersion": "2022-05-01-preview",
+          "name": "AllowAzureResources",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', concat(parameters('serverName')))]"
+          ],
+          "location": "[parameters('location')]",
+          "properties": {
+            "endIpAddress": "0.0.0.0",
+            "startIpAddress": "0.0.0.0"
+          }
         },
         {
-            "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2022-05-01",
-            "name": "[parameters('storageAccountName')]",
-            "location": "[parameters('location')]",
-            "sku": {
-              "name": "Standard_LRS"
-            },
-            "kind": "Storage",
-            "properties": {
-              "supportsHttpsTrafficOnly": true,
-              "defaultToOAuthAuthentication": true
-            }
-        },
-        {
-            "type": "Microsoft.Insights/components",
-            "apiVersion": "2020-02-02",
-            "name": "[parameters('databaseDeployApplicationInsightsName')]",
-            "location": "[parameters('location')]",
-            "kind": "web",
-            "properties": {
-              "Application_Type": "web",
-              "Request_Source": "rest"
-            }
-        },
-        {
-            "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2021-03-01",
-            "name": "[parameters('databaseDeployFunctionName')]",
-            "location": "[parameters('location')]",
-            "kind": "windows",
-            "sku": {
-              "name": "Y1",
-              "tier": "Dynamic"
-            },
-            "properties": {
-                "reserved": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites",
-            "apiVersion": "2021-03-01",
-            "name": "[parameters('databaseDeployFunctionName')]",
-            "location": "[parameters('location')]",
-            "kind": "functionapp",
-            "properties": {
-              "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('databaseDeployFunctionName'))]",
-              "siteConfig": {
-                "appSettings": [
-                  {
-                    "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                    "value": "[reference(resourceId('Microsoft.Insights/components', parameters('databaseDeployApplicationInsightsName')), '2020-02-02').InstrumentationKey]"
-                  },
-                  {
-					"name": "AzureWebJobsStorage",
-					"value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';EndpointSuffix=', environment().suffixes.storage, ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')),'2017-06-01').keys[0].value)]"
-				  },                  
-                  {
-                    "name": "FUNCTIONS_WORKER_RUNTIME",
-                    "value": "dotnet-isolated"
-                  },
-                  {
-                    "name": "FUNCTIONS_EXTENSION_VERSION",
-                    "value": "~4"        
-                  },
-                  {
-                    "name": "WEBSITE_RUN_FROM_PACKAGE",
-                    "value": "1"
-                  }
-                ],
-                "netFrameworkVersion": "v7.0"
-              },
-              "httpsOnly": true
-            }
-        },
-        {
-            "type": "Microsoft.Insights/components",
-            "apiVersion": "2020-02-02",
-            "name": "[parameters('updaterApplicationInsightsName')]",
-            "location": "[parameters('location')]",
-            "kind": "web",
-            "properties": {
-              "Application_Type": "web",
-              "Request_Source": "rest"
-            }
-        },        
-        {
-            "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2021-03-01",
-            "name": "[parameters('updaterFunctionName')]",
-            "location": "[parameters('location')]",
-            "kind": "windows",
-            "sku": {
-              "name": "Y1",
-              "tier": "Dynamic"
-            },
-            "properties": {
-                "reserved": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites",
-            "apiVersion": "2021-03-01",
-            "name": "[parameters('updaterFunctionName')]",
-            "location": "[parameters('location')]",
-            "kind": "functionapp",
-            "properties": {
-              "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('updaterFunctionName'))]",
-              "siteConfig": {
-                "appSettings": [
-                  {
-                    "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                    "value": "[reference(resourceId('Microsoft.Insights/components', parameters('updaterApplicationInsightsName')), '2020-02-02').InstrumentationKey]"
-                  },
-                  {
-					"name": "AzureWebJobsStorage",
-					"value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';EndpointSuffix=', environment().suffixes.storage, ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')),'2017-06-01').keys[0].value)]"
-				  },                  
-                  {
-                    "name": "FUNCTIONS_WORKER_RUNTIME",
-                    "value": "dotnet-isolated"
-                  },
-                  {
-                    "name": "FUNCTIONS_EXTENSION_VERSION",
-                    "value": "~4"        
-                  },
-                  {
-                    "name": "WEBSITE_RUN_FROM_PACKAGE",
-                    "value": "1"
-                  }
-                ],
-                "netFrameworkVersion": "v7.0"
-              },
-              "httpsOnly": true
-            }
+          "type": "databases",
+          "apiVersion": "2022-05-01-preview",
+          "name": "[parameters('sqlDBName')]",
+          "location": "[parameters('location')]",
+          "sku": {
+            "name": "Basic",
+            "tier": "Basic"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', concat(parameters('serverName')))]"
+          ]
         }
-    ]
+      ]
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2022-05-01",
+      "name": "[parameters('storageAccountName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "Storage",
+      "properties": {
+        "supportsHttpsTrafficOnly": true,
+        "defaultToOAuthAuthentication": true
+      }
+    },
+    {
+      "type": "Microsoft.Insights/components",
+      "apiVersion": "2020-02-02",
+      "name": "[concat(parameters('databaseDeployFunctionName'), '-insights')]",
+      "location": "[parameters('location')]",
+      "kind": "web",
+      "properties": {
+        "Application_Type": "web",
+        "Request_Source": "rest"
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2021-03-01",
+      "name": "[parameters('planName')]",
+      "location": "[parameters('location')]",
+      "kind": "windows",
+      "sku": {
+        "name": "Y1",
+        "tier": "Dynamic"
+      },
+      "properties": {
+        "reserved": false
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2021-03-01",
+      "name": "[parameters('databaseDeployFunctionName')]",
+      "location": "[parameters('location')]",
+      "kind": "functionapp",
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('planName'))]",
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('Microsoft.Insights/components', concat(parameters('databaseDeployFunctionName'), '-insights')), '2020-02-02').InstrumentationKey]"
+            },
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';EndpointSuffix=', environment().suffixes.storage, ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')),'2017-06-01').keys[0].value)]"
+            },
+            {
+              "name": "FUNCTIONS_WORKER_RUNTIME",
+              "value": "dotnet-isolated"
+            },
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~4"
+            },
+            {
+              "name": "WEBSITE_RUN_FROM_PACKAGE",
+              "value": "1"
+            }
+          ],
+          "netFrameworkVersion": "v7.0"
+        },
+        "httpsOnly": true
+      }
+    },
+    {
+      "type": "Microsoft.Insights/components",
+      "apiVersion": "2020-02-02",
+      "name": "[concat(parameters('updaterFunctionName'), '-insights')]",
+      "location": "[parameters('location')]",
+      "kind": "web",
+      "properties": {
+        "Application_Type": "web",
+        "Request_Source": "rest"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2021-03-01",
+      "name": "[parameters('updaterFunctionName')]",
+      "location": "[parameters('location')]",
+      "kind": "functionapp",
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('planName'))]",
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('Microsoft.Insights/components', concat(parameters('updaterFunctionName'), '-insights')), '2020-02-02').InstrumentationKey]"
+            },
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';EndpointSuffix=', environment().suffixes.storage, ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')),'2017-06-01').keys[0].value)]"
+            },
+            {
+              "name": "FUNCTIONS_WORKER_RUNTIME",
+              "value": "dotnet-isolated"
+            },
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~4"
+            },
+            {
+              "name": "WEBSITE_RUN_FROM_PACKAGE",
+              "value": "1"
+            }
+          ],
+          "netFrameworkVersion": "v7.0"
+        },
+        "httpsOnly": true
+      }
+    }
+  ]
 }
