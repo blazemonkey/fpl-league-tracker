@@ -256,7 +256,6 @@
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('apiName'))]",
         "siteConfig": {
-          "linuxFxVersion": "DOTNETCORE|7.0",
           "appSettings": [
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -278,7 +277,14 @@
               "name": "WEBSITE_RUN_FROM_PACKAGE",
               "value": "1"
             }
-          ]
+          ],
+          "metadata": [
+            {
+                "name": "CURRENT_STACK",
+                "value": "dotnet"
+            }
+          ],
+          "netFrameworkVersion": "v7.0"
         },
         "httpsOnly": true
       }
