@@ -242,7 +242,7 @@
       "location": "[parameters('location')]",
       "kind": "windows",
       "sku": {
-        "name": "B1"
+        "name": "D1"
       },
       "properties": {
         "reserved": false
@@ -264,14 +264,6 @@
             {
               "name": "AzureWebJobsStorage",
               "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';EndpointSuffix=', environment().suffixes.storage, ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')),'2017-06-01').keys[0].value)]"
-            },
-            {
-              "name": "FUNCTIONS_WORKER_RUNTIME",
-              "value": "dotnet-isolated"
-            },
-            {
-              "name": "FUNCTIONS_EXTENSION_VERSION",
-              "value": "~4"
             },
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
