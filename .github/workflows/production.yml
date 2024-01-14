@@ -124,13 +124,3 @@ jobs:
           dotnet build --configuration Release --output ./output
           popd
 
-      - name: Updating API Web App
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ env.AZURE_API_NAME }}
-          package: './FPLV2.Api/output'          
-
-      - name: Update Environment Variables for API Web App
-        run: |
-          az webapp config connection-string set --name "${{ env.AZURE_API_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --connection-string-type SQLAzure --settings DefaultConnection="${{ env.DATABASE_CONNECTION_STRING }}"
-          az webapp config appsettings set --name "${{ env.AZURE_API_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --settings "FplBaseUrl=${{ env.FPL_BASE_URL }}"          
