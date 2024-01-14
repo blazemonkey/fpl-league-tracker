@@ -23,6 +23,7 @@ public class Program
 
         builder.Services.AddCors();
         builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+        builder.Configuration.AddEnvironmentVariables();
         var url = builder.Configuration.GetValue<string>("FplBaseUrl") ?? string.Empty;
         builder.Services.AddHttpClient<FplClient>(x => x.BaseAddress = new Uri(url));
         builder.Services.AddOutputCache(options =>
