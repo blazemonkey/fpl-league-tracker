@@ -148,7 +148,7 @@ jobs:
           npm run build
           popd
 
-      - name: Build And Deploy
+      - name: Updating Website Azure Static Web App
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_WEBSITE_API_TOKEN }}
@@ -156,4 +156,6 @@ jobs:
           action: "upload"
           app_location: "FPLV2.Website"
           output_location: "dist/fplv2.website"
+          skip_app_build: true
+          skip_api_build: true
       
