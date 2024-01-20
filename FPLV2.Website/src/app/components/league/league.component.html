@@ -5,25 +5,47 @@
 
     <div class="league-section">
         <h4>Stats</h4>
-        <div class="select-wrapper">
-            <select [(ngModel)]="selectedStat">
-                <option *ngFor="let s of stats" [ngValue]="s">{{s.name}}</option>
-            </select>
+        <div class="league-controls">
+            <div>
+                <div class="select-wrapper">
+                    <select [(ngModel)]="selectedStatType" (change)="changeType()">
+                        <option value="1">Overall</option>
+                        <option value="2">Team</option>
+                    </select>
+                </div>
+                <div class="select-wrapper">
+                    <select [(ngModel)]="selectedStat">
+                        <ng-container *ngFor="let s of stats">
+                            <option [ngValue]="s" *ngIf="s.type == selectedStatType">{{s.name}}</option>
+                        </ng-container>
+                    </select>
+                </div>
+                <div class="select-wrapper" *ngIf="selectedStatType == 2">
+                    <select [(ngModel)]="selectedPlayer">
+                        <option *ngFor="let p of players" [ngValue]="p">{{p.teamName}}</option>
+                    </select>
+                </div>                
+            </div>
+            <div class="expand" (click)="expandStats()">Full Screen &#x26F6;</div>
         </div>
         <app-stat-table id="stats-table" *ngIf="this.selectedStat" 
             [type]="this.selectedStat.type" 
             [statId]="this.selectedStat.id" 
             [seasonId]="this.seasonId" 
-            [leagueId]="this.leagueId">
+            [leagueId]="this.leagueId"
+            [playerId]="this.selectedPlayer.id">
         </app-stat-table>
     </div>
 
     <div class="league-section">
         <h4>Charts</h4>
-        <div class="select-wrapper">
-            <select [(ngModel)]="selectedChart">
-                <option *ngFor="let c of charts" [ngValue]="c">{{c.name}}</option>
-            </select>
+        <div class="league-controls">
+            <div class="select-wrapper">
+                <select [(ngModel)]="selectedChart">
+                    <option *ngFor="let c of charts" [ngValue]="c">{{c.name}}</option>
+                </select>
+            </div>
+            <div class="expand" (click)="expandChart()">Full Screen &#x26F6;</div>
         </div>
         <app-chart id="chart" *ngIf="this.selectedChart" 
             [type]="this.selectedChart.type" 
@@ -31,5 +53,19 @@
             [seasonId]="this.seasonId" 
             [leagueId]="this.leagueId">
         </app-chart>
+    </div>
+
+    <div class="league-section picks-section">
+        <h4>Picks</h4>
+        <div class="league-controls">
+            <div></div>
+            <div class="expand" (click)="expandPicks()">Full Screen &#x26F6;</div>
+        </div>
+        <app-picks-visualizer id="picks"
+            [seasonId]="this.seasonId" 
+            [leagueId]="this.leagueId"
+            [teams]="this.teams"
+            [players]="this.players">
+        </app-picks-visualizer>
     </div>
 </div>

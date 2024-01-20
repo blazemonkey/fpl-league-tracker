@@ -30,9 +30,13 @@ export class HttpService {
     return this.get(url);
   }
 
-  getStat(type: number, statId: number, seasonId: number, leagueId: number) {
-    var typeName = type == 1 ? 'overall' : '';
-    var url = `${environment.apiUrl}/stats/${typeName}/${statId}/${seasonId}/${leagueId}`;
+  getStat(type: number, statId: number, seasonId: number, leagueId: number, playerId: number = 0) {
+    var url = '';
+    if (type == 1)
+      url = `${environment.apiUrl}/stats/overall/${statId}/${seasonId}/${leagueId}`;
+    else if (type == 2)
+      url = `${environment.apiUrl}/stats/team/${statId}/${seasonId}/${leagueId}/${playerId}`;
+    
     return this.get(url);
   }
 
@@ -45,6 +49,11 @@ export class HttpService {
     var typeName = type == 1 ? 'line' : '';
     var url = `${environment.apiUrl}/charts/${typeName}/${chartId}/${seasonId}/${leagueId}`;
     return this.get(url);
+  }
+
+  getPicks(seasonId: number, leagueId: number, options: any) {
+    var url = `${environment.apiUrl}/charts/points/${seasonId}/${leagueId}`;
+    return this.post(url, options);
   }
 
   private get<T>(url: string, params?: HttpParams) {

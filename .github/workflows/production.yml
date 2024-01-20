@@ -145,5 +145,5 @@ jobs:
         run: |
           pushd './FPLV2.Website'
           npm install
-          npm run build -- --prod
+          npm run build
           popd

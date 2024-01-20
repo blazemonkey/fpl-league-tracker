@@ -1,0 +1,11 @@
+.chart-container {
+    height: 100%;
+}
+
+::ng-deep .ngx-charts .gridline-path {
+    stroke: #212121 !important;
+}
+
+::ng-deep .chart-legend .legend-label .active .legend-label-text {
+    color: white !important;
+}

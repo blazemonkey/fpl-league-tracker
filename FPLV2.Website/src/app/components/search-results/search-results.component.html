@@ -7,7 +7,7 @@
 
 <div class="search-results-container"> 
     <ag-grid-angular class="search-results"
-        *ngIf="!loading"
+        *ngIf="!loading && !error"
         class="ag-theme-alpine-dark"
         [headerHeight]="0"
         [domLayout]="domLayout"
@@ -18,4 +18,6 @@
         [columnDefs]="columns"
         (rowSelected)="onRowSelected($event)">
     </ag-grid-angular>
+    <img *ngIf="loading" class="loading" src="assets/loading.svg"/>
+    <div *ngIf="!loading && error" class="error">An error has occured while attempting to search for a Mini League. Please try again later.</div>
 </div>

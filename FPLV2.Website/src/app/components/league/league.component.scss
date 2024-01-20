@@ -20,9 +20,18 @@
         padding: 0.5rem;
     }
 
+    .league-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        margin: 1.0rem;
+    }
+
     .select-wrapper {
         position: relative;
-        width: 20rem;
+        width: 17rem;
+        margin: 0.2rem;
 
     select {
         appearance: none;
@@ -36,7 +45,7 @@
         position: relative;
         display: flex;    
         padding: 0.5rem;
-        width: 20rem;
+        width: 17rem;
         border-radius: .25em;
         }
     }
@@ -49,4 +58,14 @@
         position: absolute;
         pointer-events: none;
     }
+
+    .expand {
+        cursor: pointer;
+        color: var(--main-color);
+        font-weight: bold;
+    }
+}
+
+.picks-section {
+    height: 500px;
 }

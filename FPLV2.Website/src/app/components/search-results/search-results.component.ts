@@ -11,6 +11,7 @@ import { HttpService } from 'src/app/services/http.service';
 export class SearchResultsComponent implements OnInit {
   name: string = '';
   loading: boolean = true;
+  error: boolean = false;
 
   rowSelection: 'single' | 'multiple' = 'single';
   domLayout: DomLayoutType = 'autoHeight';
@@ -40,8 +41,10 @@ export class SearchResultsComponent implements OnInit {
           }
           else
             this.rows = values; 
+
+          this.loading = false;
         },
-      complete: () => { this.loading = false; }});    
+      error: () => { this.loading = false; this.error = true; }});    
     }
 
   onRowSelected(event: RowSelectedEvent) {

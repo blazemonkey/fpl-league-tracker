@@ -15,6 +15,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.features.push(new Feature('../../assets/features/picks.png', 'Picks Visualizer', 'See the pattern of picks that players in your Mini League are making'))
+    this.features.push(new Feature('../../assets/features/chart.png', 'Charts', 'See your Mini League represented as various charts'))
   }
 
   search(event: KeyboardEvent): void {

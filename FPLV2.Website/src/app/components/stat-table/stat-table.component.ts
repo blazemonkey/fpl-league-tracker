@@ -12,6 +12,7 @@ export class StatTableComponent {
   @Input() statId: number = 0;
   @Input() seasonId: number = 0;
   @Input() leagueId: number = 0;
+  @Input() playerId: number = 0;
 
   gridOptions: any;
   rowSelection: 'single' | 'multiple' = 'single';
@@ -40,10 +41,10 @@ export class StatTableComponent {
   }
 
   getStat() {
-    this.httpService.getStat(this.type, this.statId, this.seasonId, this.leagueId).subscribe({ 
+    this.httpService.getStat(this.type, this.statId, this.seasonId, this.leagueId, this.playerId).subscribe({ 
       next: (values: any) =>
         {
-          if (!values.length)
+          if (!values?.length)
             return;
 
           this.columns = [];

@@ -1,1 +1,13 @@
-<p>chart works!</p>
+<div class="chart-container">
+    <ngx-charts-line-chart
+        [results]="chartData"
+        [scheme]="'horizon'"
+        [showXAxisLabel]="true"
+        [showYAxisLabel]="true"
+        [legend]="true"
+        [xAxis]="true"
+        [yAxis]="true"
+        [xAxisTicks]="xAxisTicks"
+        style="fill: #FFFFFF;">
+    </ngx-charts-line-chart>
+</div>

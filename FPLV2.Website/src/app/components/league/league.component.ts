@@ -8,11 +8,18 @@ import { HttpService } from 'src/app/services/http.service';
   styleUrls: ['./league.component.scss']
 })
 export class LeagueComponent {
+  loading: boolean = true;
+  error: boolean = false;
+  
   seasonId: number = 0;
   leagueId: number = 0;
   name: string = '';
   stats: any[] = [];
+  selectedStatType: any;
   selectedStat: any;
+  players: any[] = [];
+  selectedPlayer: any;
+  teams: any[] = [];
   charts: any[] = [];
   selectedChart: any;
 
@@ -30,12 +37,16 @@ export class LeagueComponent {
         this.httpService.getLeagueSummary(this.seasonId, this.leagueId).subscribe({next: (values: any) => 
           {
               this.name = values.name;
+              this.players = values.players;
+              this.selectedPlayer = this.players[0];
+              this.teams = values.teams;
           }});
 
         this.httpService.getStats().subscribe({next: (values: any) => 
           {
               this.stats = values;
-              this.selectedStat = this.stats[0];
+              this.selectedStatType = 1;
+              this.selectedStat = this.stats.find(x => x.type == this.selectedStatType);
           }});
 
         this.httpService.getCharts().subscribe({next: (values: any) => 
@@ -43,6 +54,27 @@ export class LeagueComponent {
               this.charts = values;
               this.selectedChart = this.charts[0];
           }});
+    });
+  }
+
+  changeType() {
+    this.selectedStat = this.stats.find(x => x.type == this.selectedStatType);
+  }
+
+  expandStats() {
+
+  }
+
+  expandChart() {
+    if (!this.selectedChart)
+      return;
+
+    this.router.navigate([`/season/${this.seasonId}/league/${this.leagueId}/chart/${this.selectedChart.type}/${this.selectedChart.id}`]);
+  }
+
+  expandPicks() {
+    this.router.navigate([`/season/${this.seasonId}/league/${this.leagueId}/picks`], {
+      state: { players: this.players, teams: this.teams }
     });
   }
 }
