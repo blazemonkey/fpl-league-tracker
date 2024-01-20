@@ -140,12 +140,10 @@ jobs:
         with:
           node-version: 21
   
-      - name: Install Angular dependencies
-        run: npm install
-  
       - name: Build Angular Website
-        shell: pwsh
+        shell: pwsh      
         run: |
           pushd './FPLV2.Website'
+          npm install
           npm run build -- --prod
           popd
