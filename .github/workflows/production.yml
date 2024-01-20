@@ -133,4 +133,19 @@ jobs:
       - name: Update Environment Variables for API Web App
         run: |
           az webapp config connection-string set --name "${{ env.AZURE_API_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --connection-string-type SQLAzure --settings DefaultConnection="${{ env.DATABASE_CONNECTION_STRING }}"
-          az webapp config appsettings set --name "${{ env.AZURE_API_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --settings "FplBaseUrl=${{ env.FPL_BASE_URL }}"          
+          az webapp config appsettings set --name "${{ env.AZURE_API_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --settings "FplBaseUrl=${{ env.FPL_BASE_URL }}"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 21
+  
+      - name: Install Angular dependencies
+        run: npm install
+  
+      - name: Build Angular Website
+        shell: pwsh
+        run: |
+          pushd './FPLV2.Website'
+          npm run build -- --prod
+          popd
