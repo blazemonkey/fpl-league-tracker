@@ -147,3 +147,13 @@ jobs:
           npm install
           npm run build
           popd
+
+      - name: Build And Deploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_WEBSITE_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: "FPLV2.Website"
+          output_location: "dist/fplv2.website"
+      
