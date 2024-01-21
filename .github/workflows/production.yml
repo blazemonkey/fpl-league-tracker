@@ -150,7 +150,7 @@ jobs:
           $newApiUrl = '${{ env.API_URL }}'
           $newContent = $content -replace $pattern, "apiUrl: '$newApiUrl'"
           Set-Content -Path .\config.ts -Value $newContent
-          pushd './FPLV2.Website'
+          cd ../
           npm install
           npm run build
           popd
