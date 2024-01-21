@@ -86,6 +86,7 @@ jobs:
           connectionString="${connectionString/<username>/${{ vars.AZURE_DATABASE_USERNAME }}}" 
           connectionString="${connectionString/<password>/${{ secrets.AZURE_DATABASE_PASSWORD }}}"
           echo "DATABASE_CONNECTION_STRING=$connectionString" >> $GITHUB_ENV
+          echo "API_URL=https://$(az webapp show --name "${{ env.AZURE_API_NAME }}" --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --query defaultHostName --output tsv)" >> $GITHUB_ENV
 
       - name: Execute Database Deploy Azure Function
         shell: pwsh
@@ -143,6 +144,12 @@ jobs:
       - name: Build Angular Website
         shell: pwsh      
         run: |
+          pushd './FPLV2.Website/src'
+          $content = Get-Content -Path .\config.ts -Raw
+          $pattern = 'apiUrl: ''(.*?)'''
+          $newApiUrl = '${{ env.API_URL }}'
+          $newContent = $content -replace $pattern, "apiUrl: '$newApiUrl'"
+          Set-Content -Path .\config.ts -Value $newContent
           pushd './FPLV2.Website'
           npm install
           npm run build
