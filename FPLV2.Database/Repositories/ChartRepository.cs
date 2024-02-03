@@ -12,7 +12,7 @@ public class ChartRepository : BaseRepository, IChartRepository
 
     public async Task<Chart[]> GetAll()
     {
-        var sql = "select * from charts";
+        var sql = "select * from charts where active = 1";
         using var conn = await OpenConnection();
         var result = await conn.QueryAsync<Chart>(sql);
         return result.ToArray();
@@ -56,14 +56,34 @@ public class ChartRepository : BaseRepository, IChartRepository
         return results;
     }
 
+    public async Task<IDictionary<string, LineChartPoint[]>> GetGameweekTotalBenchPointsHistory(int seasonId, int leagueId)
+    {
+        var sql = "select p.PlayerName, p.TeamName, po.Gameweek, po.Total as Points from leagues l join players_in_leagues pil on l.Id = pil.LeagueId join players p on pil.PlayerId = p.Id join points po on p.Id = po.PlayerId  join seasons s on l.SeasonId = s.Id where l.LeagueId = @LeagueId and s.Id = @SeasonId and po.Gameweek >= l.StartEvent order by p.Id, po.Gameweek";
+        using var conn = await OpenConnection();
+        var points = await conn.QueryAsync<PointsHistory>(sql, new { SeasonId = seasonId, LeagueId = leagueId });
+
+        var results = points.GroupBy(x => x.TeamName).ToDictionary(x => x.Key, x => x.Select(x => new LineChartPoint() { X = x.Gameweek, Y = x.Points }).ToArray());
+        return results;
+    }
+
+    public async Task<IDictionary<string, LineChartPoint[]>> GetGameweekBenchPointsHistory(int seasonId, int leagueId)
+    {
+        var sql = "select p.PlayerName, p.TeamName, po.Gameweek, po.GameweekPointsOnBench as Points from leagues l join players_in_leagues pil on l.Id = pil.LeagueId join players p on pil.PlayerId = p.Id join points po on p.Id = po.PlayerId  join seasons s on l.SeasonId = s.Id where l.LeagueId = @LeagueId and s.Id = @SeasonId and po.Gameweek >= l.StartEvent order by p.Id, po.Gameweek";
+        using var conn = await OpenConnection();
+        var points = await conn.QueryAsync<PointsHistory>(sql, new { SeasonId = seasonId, LeagueId = leagueId });
+
+        var results = points.GroupBy(x => x.TeamName).ToDictionary(x => x.Key, x => x.Select(x => new LineChartPoint() { X = x.Gameweek, Y = x.Points }).ToArray());
+        return results;
+    }
+
     public async Task<PointsChartGroupedData[]> GetPointsChart(int seasonId, int leagueId, PointsChartOptions options)
     {
         var sql = "select e.Id, t.Code as TeamCode, e.ElementType, e.FirstName, e.SecondName, e.WebName, es.Gameweek, es.TotalPoints from elements e join elements_stats es on e.Id = es.ElementId join teams t on e.TeamId = t.Id where t.SeasonId = @SeasonId order by e.TeamId, e.Code, es.Gameweek";
         using var conn = await OpenConnection();
-        var elements = await conn.QueryAsync<PointsChartElement>(sql, new { SeasonId = seasonId });
+        var elements = await conn.QueryAsync<PointsChartElement>(sql, new { SeasonId = seasonId }, commandTimeout: 300);
 
         sql = "select pks.* from picks pks join players p on pks.PlayerId = p.Id join players_in_leagues pil on p.Id = pil.PlayerId join leagues l on pil.LeagueId = l.Id where l.SeasonId = @SeasonId and l.LeagueId = @LeagueId";
-        var picks = await conn.QueryAsync<Pick>(sql, new { SeasonId = seasonId, LeagueId = leagueId });
+        var picks = await conn.QueryAsync<Pick>(sql, new { SeasonId = seasonId, LeagueId = leagueId }, commandTimeout: 300);
 
         foreach (var e in elements)
         {

@@ -27,7 +27,7 @@ public class LeagueSearchUpdateFunction : Function
 #if DEBUG
     public async Task Run([TimerTrigger("0 */2 * * * *")] FunctionInfo info)
 #else
-    public async Task Run([TimerTrigger("0 0 */1 * * *")] FunctionInfo info)
+    public async Task Run([TimerTrigger("0 */2 * * * *")] FunctionInfo info)
 #endif
     {
         try

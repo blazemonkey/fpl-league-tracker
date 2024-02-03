@@ -25,6 +25,22 @@ public class LeagueSearchRepository : BaseRepository, ILeagueSearchRepository
         return result.ToArray();
     }
 
+    public async Task<LeagueSearch> GetLeagueBySeasonIdAndLeagueId(int seasonId, int leagueId)
+    {
+        var sql = "select * from leagues_search where seasonid = @SeasonId and leagueid = @LeagueId";
+        using var conn = await OpenConnection();
+        var result = await conn.QuerySingleOrDefaultAsync<LeagueSearch>(sql, new { SeasonId = seasonId, LeagueId = leagueId });
+        return result;
+    }
+
+    public async Task<LeagueSearch[]> GetLeagueBySeasonIdAndLeagueName(int seasonId, string leagueName)
+    {
+        var sql = "select * from leagues_search where seasonid = @SeasonId and name like @LeagueName";
+        using var conn = await OpenConnection();
+        var result = await conn.QueryAsync<LeagueSearch>(sql, new { SeasonId = seasonId, LeagueName = $"%{leagueName}%" });
+        return result.ToArray();
+    }
+
     public async Task<int> GetMaxLeagueId(int seasonId)
     {
         var sql = "select max(LeagueId) from leagues_search where seasonid = @SeasonId";

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
 
 @Component({
@@ -10,11 +10,18 @@ export class TitleComponent {
   title = 'FPL Visualized';
   year = '';
 
+  @Output() seasonIdEvent = new EventEmitter<number>();
+
   constructor(private httpService: HttpService) {
 
   }
 
   ngOnInit() {
-    this.httpService.getCurrentYear().subscribe({next: (values: any) => { this.year = values.year }});
+    this.httpService.getCurrentSeason().subscribe({next: (values: any) => 
+      { 
+        this.year = values.year;
+        this.seasonIdEvent.emit(values.id);
+      }
+    });
   }
 }

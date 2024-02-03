@@ -49,6 +49,28 @@ public class StatsRepository : BaseRepository, IStatsRepository
         return results;
     }
 
+    public async Task<List<IDictionary<string, object>>> GetTeamStatsDetails(string name, int seasonId, int leagueId, int playerId)
+    {
+        var method = Assembly.GetAssembly(GetType()).GetType(GetType().FullName).GetMethod($"Get{name.Replace(" ", "")}");
+        if (method == null)
+            return null;
+
+        var result = await (Task<List<IDictionary<string, object>>>)method.Invoke(this, new object[] { seasonId, leagueId, playerId });
+        return result;
+    }
+
+    public async Task<List<IDictionary<string, object>>> GetPlayerWithMostPoints(int seasonId, int leagueId, int playerId)
+    {
+        var results = await GetStoredProcedure("2_playerwithmostpoints", new { SeasonId = seasonId, LeagueId = leagueId, PlayerId = playerId });
+        return results;
+    }
+
+    public async Task<List<IDictionary<string, object>>> GetPlayerWithMostBenchPoints(int seasonId, int leagueId, int playerId)
+    {
+        var results = await GetStoredProcedure("2_playerwithmostbenchpoints", new { SeasonId = seasonId, LeagueId = leagueId, PlayerId = playerId });
+        return results;
+    }
+
     private async Task<List<IDictionary<string, object>>> GetStoredProcedure(string procedureName, object parameters)
     {
         using var conn = await OpenConnection();

@@ -10,6 +10,7 @@ import { HttpService } from 'src/app/services/http.service';
 })
 export class SearchResultsComponent implements OnInit {
   name: string = '';
+  seasonId: number =  0;
   loading: boolean = true;
   error: boolean = false;
 
@@ -25,13 +26,14 @@ export class SearchResultsComponent implements OnInit {
   constructor(private route: ActivatedRoute, private httpService: HttpService, private router: Router) {
     // Access query parameters
     this.route.queryParams.subscribe(params => {
+      this.seasonId = params['seasonId'];
       this.name = params['name'];
       this.name = decodeURI(this.name);      
     });
   }
 
   ngOnInit() {
-    this.httpService.searchLeagues(this.name).subscribe({ 
+    this.httpService.searchLeagues(this.seasonId, this.name).subscribe({ 
       next: values => 
         { 
           if (values.length == 1) 

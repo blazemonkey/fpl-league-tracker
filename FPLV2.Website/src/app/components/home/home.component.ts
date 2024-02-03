@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  seasonId: number = 0;
   features: Array<Feature> = [];
   searchQuery: string = '';
 
@@ -18,10 +19,14 @@ export class HomeComponent implements OnInit {
     this.features.push(new Feature('../../assets/features/chart.png', 'Charts', 'See your Mini League represented as various charts'))
   }
 
+  onSeasonLoaded(data: any): void {
+    this.seasonId = data;
+  }
+
   search(event: KeyboardEvent): void {
     if ((event.key != "Enter") || (!this.searchQuery))
       return;
     
-    this.router.navigate(['/search-results'], { queryParams: { name: encodeURI(this.searchQuery) } });
+    this.router.navigate(['/search-results'], { queryParams: { seasonId: this.seasonId, name: encodeURI(this.searchQuery) } });
   }
 }

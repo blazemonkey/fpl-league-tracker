@@ -69,7 +69,7 @@ public class DeployFunction
     }
 
     /// <summary>
-    /// Check if the passed in body to the POST Function contains all the required data
+    /// Check if the passed in body to the POST Function contains all the required data 
     /// </summary>
     /// <param name="req">Request to check</param>
     /// <returns>Empty if no properties are missing, otherwise the error message to return</returns>

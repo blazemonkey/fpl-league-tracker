@@ -9,14 +9,14 @@ import { environment } from '../../config'
 export class HttpService {
   constructor(private http: HttpClient) {}  
 
-  getCurrentYear() {
+  getCurrentSeason() {
     var url = `${environment.apiUrl}/seasons/latest`;
     return this.get(url);
   }
 
-  searchLeagues(name: string) {
-    var url = `${environment.apiUrl}/leagues/search`;
-    var params = new HttpParams().set('name', name);
+  searchLeagues(seasonId: number, name: string) {
+    var url = `${environment.apiUrl}/leagues/search/${seasonId}`;
+    var params = new HttpParams().set('leagueIdOrName', name);
     return this.get<any[]>(url, params);
   }
 
