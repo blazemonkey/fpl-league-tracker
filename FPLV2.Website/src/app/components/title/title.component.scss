@@ -1,7 +1,21 @@
 h1 {
-    font-size: 3rem;
+    font-size: 2rem;
     margin-bottom: 0rem;
 }
+
+h5 {
+    font-size: 1rem;
+}
+
+@media only screen and (min-width: 600px) {
+    h1 {
+        font-size: 3rem;
+    }
+
+    h5 {
+        font-size: 1.25rem;
+    }
+  }
 
 h6 {
     margin-bottom: 0rem;
