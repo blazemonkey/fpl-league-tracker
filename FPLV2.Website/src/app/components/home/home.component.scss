@@ -16,7 +16,7 @@
         background-color: transparent;
         border-radius: 2.0rem;
         border: 1px solid #575756;
-        font-size: 1.5rem;
+        font-size: 1.0rem;
         line-height: 18px;
         margin: 1.0rem;
         padding: 12px 24px;
@@ -27,6 +27,13 @@
     p {
         margin: 0.5rem;
         text-align : center;
+        overflow-wrap: anywhere;
+    }
+
+    @media only screen and (min-width: 600px) {
+        .search-input {
+            font-size: 1.5rem;
+        }
     }
 }
 

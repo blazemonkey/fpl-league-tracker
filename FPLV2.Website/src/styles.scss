@@ -42,3 +42,13 @@ input {
     color: white;;
     padding: 1.0rem;
 }
+
+p {
+    font-size: 0.8rem;
+}
+
+@media only screen and (min-width: 600px) {
+    p {
+        font-size: 1rem;
+    }
+}
