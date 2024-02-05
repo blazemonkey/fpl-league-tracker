@@ -53,7 +53,7 @@ export class StatTableComponent {
           {
             var c = columns[i];
             var gameweekWidth = 110;
-            this.columns.push({ headerName: c, field: c, flex: i == 0 ? 2 : 0 })
+            this.columns.push({ headerName: c, field: c, flex: i == 0 ? 2 : 1 })
           }
           
           this.gridOptions.api.setColumnDefs(this.columns);
