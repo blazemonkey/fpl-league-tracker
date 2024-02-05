@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: 1.0rem;
+    margin: 0.5rem;
 
     .league-title {
         font-weight: bold;
@@ -63,9 +63,22 @@
         cursor: pointer;
         color: var(--main-color);
         font-weight: bold;
+        font-size: 0.8rem;
     }
 }
 
 .picks-section {
     height: 500px;
+}
+
+@media only screen and (min-width: 600px) {
+    .league-container {
+        margin: 1.0rem;
+    }
+
+    .league-section {
+        .expand {
+            font-size: 1.0rem;
+        }
+    }
 }

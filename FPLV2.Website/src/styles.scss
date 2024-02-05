@@ -9,9 +9,9 @@
 }
 
 .ag-theme-alpine-dark {
-    --ag-font-size: 14px;
+    --ag-font-size: 12px;
     --ag-font-family: var(--main-font-family);
-  }
+}
 
 html, body {
     background-color: black;
@@ -43,12 +43,66 @@ input {
     padding: 1.0rem;
 }
 
-p {
+h1 {
+    font-size: 2rem;
+    margin-bottom: 0rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+}
+
+h3 {
+    font-size: 1.25rem;
+}
+
+h4 {
+    font-size: 1.15rem;
+}
+
+h5 {
+    font-size: 1rem;
+}
+
+h6, p {
+    margin-bottom: 0rem;
+    font-size: 0.8rem;
+}
+
+select {
     font-size: 0.8rem;
 }
 
 @media only screen and (min-width: 600px) {
-    p {
+    .ag-theme-alpine-dark {
+        --ag-font-size: 14px;
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    h4 {
+        font-size: 1.35rem;
+    }
+
+    h5 {
+        font-size: 1.25rem;
+    }
+    
+    h6, p {
+        font-size: 1rem;
+    }
+
+    select {
         font-size: 1rem;
     }
 }
