@@ -161,4 +161,46 @@ public class StatsTests : UnitTests
         Assert.AreEqual(1, (int)stats[5]["Gameweek"]);
         Assert.AreEqual(10, (int)stats[5]["Points"]);
     }
+
+    [TestMethod]
+    public async Task StatsMostCaptainPointsTest()
+    {
+        // season 1
+        var seasonId = await UnitOfWork.Seasons.Insert(new Database.Models.Season() { Year = "2022/23" });
+        var leagueId = await UnitOfWork.Leagues.Insert(new Database.Models.League() { LeagueId = 1, SeasonId = seasonId, Name = "PSL" });
+
+        var playerId1 = await UnitOfWork.Players.Insert(new Database.Models.Player() { LeagueId = leagueId, EntryId = 1, PlayerName = "Fake Player 1", TeamName = "Fake Team 1" });
+        var playerId2 = await UnitOfWork.Players.Insert(new Database.Models.Player() { LeagueId = leagueId, EntryId = 2, PlayerName = "Fake Player 2", TeamName = "Fake Team 2" });
+        var playerId3 = await UnitOfWork.Players.Insert(new Database.Models.Player() { LeagueId = leagueId, EntryId = 3, PlayerName = "Fake Player 3", TeamName = "Fake Team 3" });
+
+        var teamId = await UnitOfWork.Teams.Insert(new Database.Models.Team() { TeamId = 1, SeasonId = seasonId });
+        var elementId1 = await UnitOfWork.Elements.Insert(new Database.Models.Element() { ElementId = 1, TeamId = teamId });
+        var elementId2 = await UnitOfWork.Elements.Insert(new Database.Models.Element() { ElementId = 2, TeamId = teamId });
+        var elementId3 = await UnitOfWork.Elements.Insert(new Database.Models.Element() { ElementId = 3, TeamId = teamId });
+
+        await UnitOfWork.ElementStats.Insert(new Database.Models.ElementStat() { ElementId = elementId1, Gameweek = 1, TotalPoints = 5});
+        await UnitOfWork.ElementStats.Insert(new Database.Models.ElementStat() { ElementId = elementId2, Gameweek = 1, TotalPoints = 1 });
+        await UnitOfWork.ElementStats.Insert(new Database.Models.ElementStat() { ElementId = elementId3, Gameweek = 1, TotalPoints = 20 });
+
+        await UnitOfWork.ElementStats.Insert(new Database.Models.ElementStat() { ElementId = elementId1, Gameweek = 2, TotalPoints = 1 });
+        await UnitOfWork.ElementStats.Insert(new Database.Models.ElementStat() { ElementId = elementId2, Gameweek = 2, TotalPoints = 5 });
+        await UnitOfWork.ElementStats.Insert(new Database.Models.ElementStat() { ElementId = elementId3, Gameweek = 2, TotalPoints = 10 });
+
+        await UnitOfWork.Picks.Insert(new Database.Models.Pick() { ElementId = elementId1, Gameweek = 1, Multiplier = 2, PlayerId = playerId1, Position = 2 });
+        await UnitOfWork.Picks.Insert(new Database.Models.Pick() { ElementId = elementId2, Gameweek = 1, Multiplier = 3, PlayerId = playerId2, Position = 3 });
+        await UnitOfWork.Picks.Insert(new Database.Models.Pick() { ElementId = elementId3, Gameweek = 1, Multiplier = 1, PlayerId = playerId3, Position = 4 });
+
+        await UnitOfWork.Picks.Insert(new Database.Models.Pick() { ElementId = elementId1, Gameweek = 2, Multiplier = 1, PlayerId = playerId1, Position = 2 });
+        await UnitOfWork.Picks.Insert(new Database.Models.Pick() { ElementId = elementId2, Gameweek = 2, Multiplier = 1, PlayerId = playerId2, Position = 3 });
+        await UnitOfWork.Picks.Insert(new Database.Models.Pick() { ElementId = elementId3, Gameweek = 2, Multiplier = 3, PlayerId = playerId3, Position = 4 });
+
+        var stats = await UnitOfWork.Stats.GetMostCaptainPoints(seasonId, 1);
+        Assert.AreEqual(3, stats.Count());
+        Assert.AreEqual("Fake Team 3", stats[0]["Team Name"].ToString());
+        Assert.AreEqual(30, (int)stats[0]["Points"]);
+        Assert.AreEqual("Fake Team 1", stats[1]["Team Name"].ToString());
+        Assert.AreEqual(10, (int)stats[1]["Points"]);
+        Assert.AreEqual("Fake Team 2", stats[2]["Team Name"].ToString());
+        Assert.AreEqual(3, (int)stats[2]["Points"]);
+    }
 }

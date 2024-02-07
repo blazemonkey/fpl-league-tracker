@@ -49,6 +49,12 @@ public class StatsRepository : BaseRepository, IStatsRepository
         return results;
     }
 
+    public async Task<List<IDictionary<string, object>>> GetMostCaptainPoints(int seasonId, int leagueId)
+    {
+        var results = await GetStoredProcedure("1_mostcaptainpoints", new { SeasonId = seasonId, LeagueId = leagueId });
+        return results;
+    }
+
     public async Task<List<IDictionary<string, object>>> GetTeamStatsDetails(string name, int seasonId, int leagueId, int playerId)
     {
         var method = Assembly.GetAssembly(GetType()).GetType(GetType().FullName).GetMethod($"Get{name.Replace(" ", "")}");

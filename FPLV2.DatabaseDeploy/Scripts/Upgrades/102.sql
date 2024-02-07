@@ -1,6 +1,6 @@
-IF ((SELECT COUNT(1) FROM [dbo].[stats] WHERE Name = 'Most Captain and Vice Captain Points') = 0)
+IF ((SELECT COUNT(1) FROM [dbo].[stats] WHERE Name = 'Most Captain Points') = 0)
 BEGIN
-	INSERT INTO [dbo].[stats] VALUES (1, 'Most Captain and Vice Captain Points', 'Difference Maker', '1_mostcaptainpoints', 3, 1)
+	INSERT INTO [dbo].[stats] VALUES (1, 'Most Captain Points', 'Difference Maker', '1_mostcaptainpoints', 3, 1)
 END
 GO
 

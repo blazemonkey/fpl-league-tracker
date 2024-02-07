@@ -119,7 +119,7 @@ namespace FPLV2.UnitTests
             var path = AppDomain.CurrentDomain.BaseDirectory;
             path = path.Substring(0, path.LastIndexOf("FPLV2.UnitTests"));
 
-            path = Path.Combine(path, "FPLV2.Database", "Scripts");
+            path = Path.Combine(path, "FPLV2.DatabaseDeploy", "Scripts");
             if (Directory.Exists(path) == false)
                 throw new Exception($"Failed to find directory: {path}");
 

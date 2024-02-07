@@ -42,7 +42,7 @@ BEGIN
 	)
 
 	INSERT INTO #TempTable
-	SELECT p.Id AS PlayerId, SUM(es.TotalPoints) AS Points
+	SELECT p.Id AS PlayerId, SUM(es.TotalPoints * pk.Multiplier) AS Points
 	FROM seasons s
 	JOIN leagues l
 	ON s.Id = l.SeasonId
@@ -57,10 +57,10 @@ BEGIN
 	AND es.Gameweek = pk.Gameweek
 	AND l.LeagueId = @LeagueId
 	AND l.SeasonId = @SeasonId
-	AND Multiplier = 2
+	AND Multiplier >= 2
 	GROUP BY p.Id
 
-	SELECT p.TeamName AS 'Team', Points 
+	SELECT p.TeamName AS 'Team Name', Points 
 	FROM #TempTable tt
 	JOIN players p
 	ON tt.PlayerId = p.Id

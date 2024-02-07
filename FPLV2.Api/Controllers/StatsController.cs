@@ -30,7 +30,7 @@ public class StatsController : BaseController
     /// <param name="leagueId">Id of the league</param>
     /// <returns>Data for the stats</returns>
     [HttpGet("overall/{id}/{seasonId}/{leagueId}")]
-    public async Task<List<IDictionary<string, object>>> GetLineChart([FromRoute] int id, [FromRoute] int seasonId, [FromRoute] int leagueId)
+    public async Task<List<IDictionary<string, object>>> GetOveralStats([FromRoute] int id, [FromRoute] int seasonId, [FromRoute] int leagueId)
     {
         var stats = await UnitOfWork.Stats.GetById(id);
         if (stats == null)
@@ -49,7 +49,7 @@ public class StatsController : BaseController
     /// <param name="playerId">Id of the player</param>
     /// <returns>Data for the stats</returns>
     [HttpGet("team/{id}/{seasonId}/{leagueId}/{playerId}")]
-    public async Task<List<IDictionary<string, object>>> GetPointsChart([FromRoute] int id, [FromRoute] int seasonId, [FromRoute] int leagueId, [FromRoute] int playerId)
+    public async Task<List<IDictionary<string, object>>> GetTeamStats([FromRoute] int id, [FromRoute] int seasonId, [FromRoute] int leagueId, [FromRoute] int playerId)
     {
         var stats = await UnitOfWork.Stats.GetById(id);
         if (stats == null)
