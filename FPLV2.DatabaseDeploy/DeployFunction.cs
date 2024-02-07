@@ -167,7 +167,7 @@ public class DeployFunction
             if (success == false)
                 continue;
 
-            if (scriptVersion < latestVersion || databaseVersion > scriptVersion || databaseVersion == latestVersion)
+            if (databaseVersion > scriptVersion || databaseVersion == latestVersion)
                 continue;
 
             success = await ExecuteScript(script, conn, trans);
