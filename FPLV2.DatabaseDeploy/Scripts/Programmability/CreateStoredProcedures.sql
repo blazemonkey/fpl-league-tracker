@@ -32,6 +32,44 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE [dbo].[1_mostcaptainpoints] @SeasonId INT, @LeagueId INT
+AS
+BEGIN
+	CREATE TABLE #TempTable 
+	(
+		PlayerId INT,
+		Points INT,
+	)
+
+	INSERT INTO #TempTable
+	SELECT p.Id AS PlayerId, SUM(es.TotalPoints) AS Points
+	FROM seasons s
+	JOIN leagues l
+	ON s.Id = l.SeasonId
+	JOIN players_in_leagues pil
+	ON l.Id = pil.LeagueId
+	JOIN players p
+	ON p.Id = pil.PlayerId
+	JOIN picks pk
+	ON pk.PlayerId = p.Id
+	JOIN elements_stats es
+	ON es.ElementId = pk.ElementId	
+	AND es.Gameweek = pk.Gameweek
+	AND l.LeagueId = @LeagueId
+	AND l.SeasonId = @SeasonId
+	AND Multiplier = 2
+	GROUP BY p.Id
+
+	SELECT p.TeamName AS 'Team', Points 
+	FROM #TempTable tt
+	JOIN players p
+	ON tt.PlayerId = p.Id
+	ORDER BY Points DESC
+
+	DROP TABLE #TempTable
+END
+GO
+
 CREATE OR ALTER PROCEDURE [dbo].[2_playerwithmostpoints] @SeasonId INT, @LeagueId INT, @PlayerId INT
 
 AS
@@ -113,4 +151,3 @@ BEGIN
 
 	DROP TABLE #TempTable
 END
-
