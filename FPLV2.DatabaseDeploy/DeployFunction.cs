@@ -12,7 +12,7 @@ namespace FPLV2.DatabaseDeploy;
 
 public class DeployFunction
 {
-    public readonly string DATABASE_VERSION = "102";
+    public readonly string DATABASE_VERSION = "103";
 
     private readonly ILogger _logger;
 

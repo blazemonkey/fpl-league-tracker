@@ -14,3 +14,17 @@ public enum StatType
     Overall = 1,
     Team = 2
 }
+
+public class PointsHistory
+{
+    public string TeamName { get; set; }
+    public int Gameweek { get; set; }
+    public int Points { get; set; }
+}
+
+public class StandingsHistory
+{
+    public string TeamName { get; set; }
+    public int Gameweek { get; set; }
+    public int Ranking { get; set; }
+}

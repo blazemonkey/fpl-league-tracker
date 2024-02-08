@@ -2,6 +2,7 @@
 using FPLV2.Database.Models;
 using FPLV2.Database.Repositories.Interfaces;
 using Microsoft.Extensions.Configuration;
+using System.Globalization;
 using System.Reflection;
 
 namespace FPLV2.Database.Repositories;
@@ -73,6 +74,27 @@ public class ChartRepository : BaseRepository, IChartRepository
         var points = await conn.QueryAsync<PointsHistory>(sql, new { SeasonId = seasonId, LeagueId = leagueId });
 
         var results = points.GroupBy(x => x.TeamName).ToDictionary(x => x.Key, x => x.Select(x => new LineChartPoint() { X = x.Gameweek, Y = x.Points }).ToArray());
+        return results;
+    }
+
+    public async Task<IDictionary<string, LineChartPoint[]>> GetStandingsHistory(int seasonId, int leagueId)
+    {
+        var sql = "select p.PlayerName, p.TeamName, po.Gameweek, po.Total as Points from leagues l join players_in_leagues pil on l.Id = pil.LeagueId join players p on pil.PlayerId = p.Id join points po on p.Id = po.PlayerId  join seasons s on l.SeasonId = s.Id where l.LeagueId = @LeagueId and s.Id = @SeasonId and po.Gameweek >= l.StartEvent order by p.Id, po.Gameweek";
+        using var conn = await OpenConnection();
+        var points = await conn.QueryAsync<PointsHistory>(sql, new { SeasonId = seasonId, LeagueId = leagueId });
+
+        var minGameweek = points.Min(x => x.Gameweek);
+        var maxGameweek = points.Max(x => x.Gameweek);
+        var standings = new List<StandingsHistory>();
+        for (var i = minGameweek; i <= maxGameweek; i++)
+        {
+            var gw = points.Where(x => x.Gameweek == i).OrderByDescending(x => x.Points).ToArray();
+            var gwGrouped = gw.GroupBy(x => x.Points);
+            var st = gw.Select(x => new StandingsHistory() { Gameweek = x.Gameweek, TeamName = x.TeamName, Ranking = gw.Select(x => x.TeamName).ToList().IndexOf(x.TeamName) + 1 });
+            standings.AddRange(st);
+        }
+
+        var results = standings.GroupBy(x => x.TeamName).ToDictionary(x => x.Key, x => x.Select(x => new LineChartPoint() { X = x.Gameweek, Y = x.Ranking * -1 }).ToArray());
         return results;
     }
 

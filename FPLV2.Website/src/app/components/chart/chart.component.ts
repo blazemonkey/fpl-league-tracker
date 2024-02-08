@@ -69,4 +69,11 @@ export class ChartComponent {
         },
       complete: () => { this.loading = false; }});    
   }
+
+  yAxisTickFormatting(value: any) {
+    if (value >= 0)
+      return value;
+    
+    return value * -1;
+  }
 }
