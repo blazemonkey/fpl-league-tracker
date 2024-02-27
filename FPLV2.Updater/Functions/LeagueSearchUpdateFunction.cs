@@ -23,7 +23,7 @@ public class LeagueSearchUpdateFunction : Function
         FplClient = fplClient;
     }
 
-    [Function("LeagueSearchUpdateFunction")]
+    //[Function("LeagueSearchUpdateFunction")]
 #if DEBUG
     public async Task Run([TimerTrigger("0 */2 * * * *")] FunctionInfo info)
 #else
