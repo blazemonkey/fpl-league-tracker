@@ -31,7 +31,7 @@ public class UpdateFunction : Function
     {
         try
         {
-            Logger.LogInformation($"UpdateFunction executed at: {DateTime.Now}");
+            Logger.LogInformation($"{nameof(UpdateFunction)} executed at: {DateTime.Now}");
 
             var calls = GetApiCalls();
 
@@ -45,11 +45,11 @@ public class UpdateFunction : Function
         }
         catch (Exception ex)
         {
-            Logger.LogError($"UpdateFunction error occured: {ex}");
+            Logger.LogError($"{nameof(UpdateFunction)} error occured: {ex}");
         }
         finally
         {
-            Logger.LogInformation($"UpdateFunction completed at: {DateTime.Now}");
+            Logger.LogInformation($"{nameof(UpdateFunction)} completed at: {DateTime.Now}");
         }
     }
 

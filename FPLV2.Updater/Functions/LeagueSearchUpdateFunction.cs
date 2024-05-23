@@ -32,7 +32,7 @@ public class LeagueSearchUpdateFunction : Function
     {
         try
         {
-            Logger.LogInformation($"LeagueSearchUpdateFunction executed at: {DateTime.Now}");
+            Logger.LogInformation($"{nameof(LeagueSearchUpdateFunction)} executed at: {DateTime.Now}");
 
             var result = await FplClient.GetBootstrapStatic();
             if (result == null)
@@ -61,11 +61,11 @@ public class LeagueSearchUpdateFunction : Function
         }
         catch (Exception ex)
         {
-            Logger.LogError($"LeagueSearchUpdateFunction error occured: {ex}");
+            Logger.LogError($"{nameof(LeagueSearchUpdateFunction)} error occured: {ex}");
         }
         finally
         {
-            Logger.LogInformation($"LeagueSearchUpdateFunction completed at: {DateTime.Now}");
+            Logger.LogInformation($"{nameof(LeagueSearchUpdateFunction)} completed at: {DateTime.Now}");
         }
     }
 
