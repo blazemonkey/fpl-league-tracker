@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/mssql/server:2022-latest
 WORKDIR /Scripts
-COPY FPLV2.Database/Scripts /Scripts/
+COPY FPLV2.DatabaseDeploy/Scripts /Scripts/
 COPY FPLV2.Database/DockerInitDatabase.sh DockerInitDatabase.sh
 ENV ACCEPT_EULA Y
 ENV SA_PASSWORD Password123
