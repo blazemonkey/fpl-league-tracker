@@ -9,8 +9,8 @@
   [getRowHeight]="getRowHeight">
 </ag-grid-angular>
 
-<div *ngIf="rows.length > 0" class="picks-options" [style.height]="headerHeight" [style.width]="headerWidth">
-  <i class="glyphicon glyphicon-filter" alt-text="Filter" (click)="openFilterDialog()"></i>
+<div *ngIf="fullScreen && rows.length > 0" class="picks-options" [style.height]="headerHeight" [style.width]="headerWidth">
+  <span class="material-symbols-outlined" (click)="openFilterDialog()">filter_alt</span>
 </div>
 
 <dialog #filterDialog>
