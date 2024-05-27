@@ -8,3 +8,12 @@
   [columnDefs]="columns"
   [getRowHeight]="getRowHeight">
 </ag-grid-angular>
+
+<div *ngIf="rows.length > 0" class="picks-options" [style.height]="headerHeight" [style.width]="headerWidth">
+  <i class="glyphicon glyphicon-filter" alt-text="Filter" (click)="openFilterDialog()"></i>
+</div>
+
+<dialog #filterDialog>
+  <button (click)="closeFilterDialog(false)" aria-label="close" class="x">❌</button>
+  <h2 class="dialog-header">Filter</h2>
+</dialog>

@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RowHeightParams } from 'ag-grid-community';
 import { HttpService } from 'src/app/services/http.service';
@@ -22,6 +22,8 @@ export class PicksVisualizerComponent {
     { headerName: '', field: 'type', width: 60, pinned: 'left', cellStyle: { 'display': 'flex', 'height': '100%', 'align-items': 'center' } },
     { headerName: '', field: 'totalPoints', width: 60, pinned: 'left', cellStyle: { 'display': 'flex', 'height': '100%', 'align-items': 'center','font-weight': 'bold' } }];
   rows: any[] = [];
+  headerHeight = '';
+  headerWidth = '';
 
   colors: string[] = ["#396ab1","#da7c30","#3e9651","#cc2529","#f8518a","#7d26cd"];
   playersColorCode:  { [key: string]: string } = {};
@@ -98,12 +100,33 @@ export class PicksVisualizerComponent {
             return row;
           });
         },
-      complete: () => {  }});    
+      complete: () => 
+        {  
+          this.headerHeight = document.getElementsByClassName("ag-header")[0]?.clientHeight + "px";
+          this.headerWidth = document.getElementsByClassName("ag-header-row")[0]?.clientWidth + "px";
+        }});    
   }
 
   getRowHeight(params: RowHeightParams): number | undefined | null {
     var maxPicks = params.data.maxPicks;
     return maxPicks == 0 ? 35 : (55 + (16 * (maxPicks - 1)));
+  }
+
+  @ViewChild('filterDialog') filterDialog!: ElementRef;
+  openFilterDialog() {
+    const dialog: HTMLDialogElement | null = this.filterDialog.nativeElement;
+
+    if (dialog) {
+      dialog.showModal();
+    }
+  }
+
+  closeFilterDialog(apply: boolean) {
+    const dialog: HTMLDialogElement | null = this.filterDialog.nativeElement;
+    console.log("close");
+    if (dialog) {
+      dialog.close();
+    }
   }
 }
 
