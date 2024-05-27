@@ -1,0 +1,55 @@
+.picks-options {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    padding: 5px;
+
+    i {
+        font-size: 2.0rem;
+        padding: 10px;
+        cursor: pointer;
+    }
+}
+
+::ng-deep .ag-header-cell-label {
+    justify-content: center;
+}
+
+dialog {
+    padding: 1rem 3rem;
+	background: #333;
+    color: white;
+	border-radius: 20px;
+	border: 0;
+    width: calc(100%);
+    height: calc(100%);
+
+    .dialog-header {
+        font-weight: bold;
+    }
+
+    &::backdrop {
+		animation: fadeIn 1s ease both;
+		background: black;
+		z-index: 2;
+		backdrop-filter: blur(20px);
+	}
+
+    .x {
+        background: transparent;
+        border: none;
+		position: absolute;
+		top: 15px;
+		right: 10px;
+		transition: ease filter, transform 0.3s;
+		cursor: pointer;
+		transform-origin: center;
+		&:hover {
+			filter: grayscale(0);
+			transform: scale(1.1);
+		}
+	}
+}
