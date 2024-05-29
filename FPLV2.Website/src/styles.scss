@@ -73,6 +73,49 @@ select {
     font-size: 0.8rem;
 }
 
+ng-select {
+    background-color: grey;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 0.8rem;
+
+    .ng-select-container {
+        align-items: center;
+
+        .ng-value {
+            font-weight: bold;
+            border-radius: 10px;
+            padding: 5px;
+            margin: 5px;
+            background-color: whitesmoke;
+            color: black;
+
+            .ng-value-icon.left {
+                padding: 5px;
+            }
+        }
+
+        .ng-input > input {
+            height: 100%;
+        }
+    }
+
+    .ng-dropdown-panel-items {
+        margin: 0px 5px 0px -5px;
+        padding: 5px;
+        background-color: dimgray;
+        border-radius: 0 0 5px 5px;
+
+        .ng-option {
+            padding: 5px;
+        }
+
+        .ng-option::hover {
+            background-color: gray;
+        }
+    }
+}
+
 @media only screen and (min-width: 600px) {
     .ag-theme-alpine-dark {
         --ag-font-size: 14px;

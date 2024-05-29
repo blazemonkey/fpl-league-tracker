@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
-
+import { NgSelectModule } from '@ng-select/ng-select';
 import { CarouselModule } from '@coreui/angular';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AppRoutingModule } from './app-routing.module';
@@ -45,6 +45,7 @@ const routes: Routes = [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    NgSelectModule,
     AgGridModule,
     CarouselModule,
     NgxChartsModule,

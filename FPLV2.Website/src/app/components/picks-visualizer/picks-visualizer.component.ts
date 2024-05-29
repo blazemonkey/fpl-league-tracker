@@ -16,6 +16,9 @@ export class PicksVisualizerComponent {
   @Input() players: any[] = [];
   @Input() teams: any[] = [];
 
+  selectedPlayers: number[] | undefined;
+  filterPlayers: any[] = [];
+
   columns: any[] = [ 
     { headerName: '', field: 'image', width: 40, cellRendererSelector: () => { return { component: TeamRenderer }; }, pinned: 'left' },
     { headerName: '', field: 'name', width: 200, pinned: 'left', cellStyle: { 'display': 'flex', 'height': '100%', 'align-items': 'center' } },
@@ -26,13 +29,7 @@ export class PicksVisualizerComponent {
   headerWidth = '';
 
   colors: string[] = ["#396ab1","#da7c30","#3e9651","#cc2529","#f8518a","#7d26cd"];
-  playersColorCode:  { [key: string]: string } = {};
-
-  options = {
-    IgnoreElementsWithNoPicks: false,
-    ShowCaptainsOnly: false
-  }
-  
+  playersColorCode:  { [key: string]: string } = {};  
   fullScreen: boolean = false;
   
   constructor(private route: ActivatedRoute, private httpService: HttpService, private router: Router) {
@@ -55,6 +52,9 @@ export class PicksVisualizerComponent {
         this.players = navigation.extras.state['players'];
         this.teams = navigation.extras.state['teams'];
 
+        this.filterPlayers = this.players.sort((a, b) => a.teamName.localeCompare(b.teamName));
+        this.selectedPlayers = this.filterPlayers.map(x => x.id);
+        
         this.fullScreen = true;
         this.getPicks();
       }
@@ -66,7 +66,13 @@ export class PicksVisualizerComponent {
   }
 
   getPicks() {
-    this.httpService.getPicks(this.seasonId, this.leagueId, this.options).subscribe({ 
+    var options = {
+      IgnoreElementsWithNoPicks: false,
+      ShowCaptainsOnly: false,
+      PlayerIds: this.selectedPlayers
+    }
+
+    this.httpService.getPicks(this.seasonId, this.leagueId, options).subscribe({ 
       next: (values: any) =>
         {
           if (!values?.length)
@@ -123,9 +129,13 @@ export class PicksVisualizerComponent {
 
   closeFilterDialog(apply: boolean) {
     const dialog: HTMLDialogElement | null = this.filterDialog.nativeElement;
-    console.log("close");
     if (dialog) {
       dialog.close();
+    }
+
+    if (apply) {
+      this.rows = [];
+      this.getPicks();
     }
   }
 }

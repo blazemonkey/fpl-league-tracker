@@ -60,11 +60,27 @@ public class PointsChartGroupedData
     public List<PointsChartValueData> Values { get; set; }
 }
 
+/// <summary>
+/// The filtering options for the points chart
+/// </summary>
 public class PointsChartOptions
 {
+    /// <summary>
+    /// Gets or sets if elements with no player picks should be ignored
+    /// </summary>
     public bool IgnoreElementsWithNoPicks { get; set; }
+    /// <summary>
+    /// Gets or sets if only captain picks are shown
+    /// </summary>
     public bool ShowCaptainsOnly { get; set; }    
+    /// <summary>
+    /// Gets or sets the element type to filter by
+    /// </summary>
     public int ElementType { get; set; }
+    /// <summary>
+    /// Gets or sets the ids of the players to show
+    /// </summary>
+    public int[] PlayerIds { get; set; } = new int[] { };
 }
 
 public class PointsChartValueData
