@@ -15,5 +15,17 @@
 
 <dialog #filterDialog>
   <button (click)="closeFilterDialog(false)" aria-label="close" class="x">❌</button>
-  <h2 class="dialog-header">Filter</h2>
+  <div class="option">
+    <h5>Players</h5>
+    <ng-select [items]="filterPlayers" 
+             bindLabel="teamName" 
+             bindValue="id" 
+             [(ngModel)]="selectedPlayers"
+             [multiple]="true"
+             [hideSelected]="true">
+    </ng-select>
+  </div>
+  <div class="controls">
+    <button (click)="closeFilterDialog(true)">Apply</button>
+  </div>
 </dialog>

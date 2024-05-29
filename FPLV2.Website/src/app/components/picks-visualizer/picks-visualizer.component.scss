@@ -23,8 +23,9 @@ dialog {
     color: white;
 	border-radius: 20px;
 	border: 0;
-    width: calc(100%);
-    height: calc(100%);
+    width: 100%;
+    height:  fit-content;
+    max-width: 960px;
 
     .dialog-header {
         font-weight: bold;
@@ -51,4 +52,31 @@ dialog {
 			transform: scale(1.1);
 		}
 	}
+
+    ng-select {
+        margin: 10px;
+    }
+
+    .option {
+        margin: 10px;
+    }
+
+    .controls {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    button {
+        background-color:var(--main-color);
+        border: none;
+        color: black;
+        padding: 5px 10px;
+        margin: 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-weight: bold;
+        font-size: 0.8rem;
+        border-radius: 10px;
+      }
 }

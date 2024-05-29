@@ -109,7 +109,7 @@ public class ChartRepository : BaseRepository, IChartRepository
 
         foreach (var e in elements)
         {
-            e.Picks = picks.Where(x => x.ElementId == e.Id && x.Gameweek == e.Gameweek && (options.ShowCaptainsOnly == false || x.Multiplier >= 2)).ToArray();
+            e.Picks = picks.Where(x => options.PlayerIds.Contains(x.PlayerId) && x.ElementId == e.Id && x.Gameweek == e.Gameweek && (options.ShowCaptainsOnly == false || x.Multiplier >= 2)).ToArray();
         }
 
         var result = elements.GroupBy(x => new { x.Id, x.TeamCode, x.ElementType, x.FirstName, x.SecondName, x.WebName }).Select(e => new PointsChartGroupedData()
@@ -127,8 +127,8 @@ public class ChartRepository : BaseRepository, IChartRepository
             result = result.Where(x => x.Values.Any(z => z.Picks.Any())).ToArray();
 
         if (options.ElementType > 0)
-            result = result.Where(x => x.ElementType == options.ElementType).ToArray();
-
+            result = result.Where(x => x.ElementType == options.ElementType).ToArray();        
+        
         foreach (var r in result)
         {
             r.TotalPoints = r.Values.Sum(x => x.Points);
