@@ -109,14 +109,15 @@ public class ChartRepository : BaseRepository, IChartRepository
 
         foreach (var e in elements)
         {
-            e.Picks = picks.Where(x => options.PlayerIds.Contains(x.PlayerId) && x.ElementId == e.Id && x.Gameweek == e.Gameweek && (options.ShowCaptainsOnly == false || x.Multiplier >= 2)).ToArray();
+            e.Picks = picks.Where(x => (options.PlayerIds == null ? x.PlayerId > 0 : options.PlayerIds.Contains(x.PlayerId)) && x.ElementId == e.Id && x.Gameweek == e.Gameweek && (options.ShowCaptainsOnly == false || x.Multiplier >= 2)).ToArray();
         }
 
         var result = elements.GroupBy(x => new { x.Id, x.TeamCode, x.ElementType, x.FirstName, x.SecondName, x.WebName }).Select(e => new PointsChartGroupedData()
         {
             Id = e.Key.Id,
             TeamCode = e.Key.TeamCode,
-            ElementType = e.Key.ElementType,
+            ElementTypeId = e.Key.ElementType,
+            ElementTypeText = e.Key.ElementType == 1 ? "GKP" : e.Key.ElementType == 2 ? "DEF" : e.Key.ElementType == 3 ? "MID" : "FWD",
             FirstName = e.Key.FirstName,
             SecondName = e.Key.SecondName,
             WebName = e.Key.WebName,
@@ -126,8 +127,8 @@ public class ChartRepository : BaseRepository, IChartRepository
         if (options.IgnoreElementsWithNoPicks || options.ShowCaptainsOnly)
             result = result.Where(x => x.Values.Any(z => z.Picks.Any())).ToArray();
 
-        if (options.ElementType > 0)
-            result = result.Where(x => x.ElementType == options.ElementType).ToArray();        
+        if (options.ElementTypes?.Any() == true)
+            result = result.Where(x => options.ElementTypes.Contains(x.ElementTypeId)).ToArray();        
         
         foreach (var r in result)
         {

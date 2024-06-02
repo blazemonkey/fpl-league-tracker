@@ -17,12 +17,14 @@ export class PicksVisualizerComponent {
   @Input() teams: any[] = [];
 
   selectedPlayers: number[] | undefined;
-  filterPlayers: any[] = [];
+  filteredPlayers: any[] = [];
+  selectedElementTypes: number[] | undefined;
+  filteredElementTypes: any[] = [];
 
   columns: any[] = [ 
     { headerName: '', field: 'image', width: 40, cellRendererSelector: () => { return { component: TeamRenderer }; }, pinned: 'left' },
     { headerName: '', field: 'name', width: 200, pinned: 'left', cellStyle: { 'display': 'flex', 'height': '100%', 'align-items': 'center' } },
-    { headerName: '', field: 'type', width: 60, pinned: 'left', cellStyle: { 'display': 'flex', 'height': '100%', 'align-items': 'center' } },
+    { headerName: '', field: 'typeText', width: 60, pinned: 'left', cellStyle: { 'display': 'flex', 'height': '100%', 'align-items': 'center' } },
     { headerName: '', field: 'totalPoints', width: 60, pinned: 'left', cellStyle: { 'display': 'flex', 'height': '100%', 'align-items': 'center','font-weight': 'bold' } }];
   rows: any[] = [];
   headerHeight = '';
@@ -52,9 +54,9 @@ export class PicksVisualizerComponent {
         this.players = navigation.extras.state['players'];
         this.teams = navigation.extras.state['teams'];
 
-        this.filterPlayers = this.players.sort((a, b) => a.teamName.localeCompare(b.teamName));
-        this.selectedPlayers = this.filterPlayers.map(x => x.id);
-        
+        this.filteredPlayers = this.players.sort((a, b) => a.teamName.localeCompare(b.teamName));
+        this.selectedPlayers = this.filteredPlayers.map(x => x.id);              
+
         this.fullScreen = true;
         this.getPicks();
       }
@@ -62,14 +64,15 @@ export class PicksVisualizerComponent {
   }  
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.getPicks();    
+    this.getPicks();
   }
 
   getPicks() {
     var options = {
       IgnoreElementsWithNoPicks: false,
       ShowCaptainsOnly: false,
-      PlayerIds: this.selectedPlayers
+      PlayerIds: this.selectedPlayers,
+      ElementTypes: this.selectedElementTypes
     }
 
     this.httpService.getPicks(this.seasonId, this.leagueId, options).subscribe({ 
@@ -82,11 +85,12 @@ export class PicksVisualizerComponent {
               this.playersColorCode[value.id] = this.colors[index];
           });
 
-          this.rows = values.map((x: { teamCode: any; firstName: any; secondName: any; elementType: number; totalPoints: any; values: any[]; }) => {
+          this.rows = values.map((x: { teamCode: string; firstName: string; secondName: string; elementTypeId: number, elementTypeText: string; totalPoints: number; values: any[]; }) => {
             const row: TableRow = {
               image: x.teamCode,
               name: `${x.firstName} ${x.secondName}`,
-              type: x.elementType == 1 ? "GKP" : x.elementType == 2 ? "DEF" : x.elementType == 3 ? "MID" : "FWD",
+              typeId: x.elementTypeId,
+              typeText: x.elementTypeText,
               totalPoints: x.totalPoints,            
             };
           
@@ -105,6 +109,23 @@ export class PicksVisualizerComponent {
             row['maxPicks'] = maxPicks;
             return row;
           });
+
+          var types = this.rows.map(x => {
+            return {
+                typeId: x.typeId,
+                typeText: x.typeText
+            }}).filter((value, index, self) => 
+              index === self.findIndex((t) => (
+                  t.typeId === value.typeId && t.typeText === value.typeText
+              ))
+          ).sort((a, b) => a.typeId - b.typeId);
+          
+          if (this.filteredElementTypes.length == 0) {
+            this.filteredElementTypes = types;
+          }
+          if (this.selectedElementTypes == undefined) {
+            this.selectedElementTypes = this.filteredElementTypes.map(x => x.typeId);
+          }
         },
       complete: () => 
         {  
