@@ -17,10 +17,20 @@
   <button (click)="closeFilterDialog(false)" aria-label="close" class="x">❌</button>
   <div class="option">
     <h5>Players</h5>
-    <ng-select [items]="filterPlayers" 
+    <ng-select [items]="filteredPlayers" 
              bindLabel="teamName" 
              bindValue="id" 
              [(ngModel)]="selectedPlayers"
+             [multiple]="true"
+             [hideSelected]="true">
+    </ng-select>
+  </div>
+  <div class="option">
+    <h5>Positions</h5>
+    <ng-select [items]="filteredElementTypes" 
+             bindLabel="typeText" 
+             bindValue="typeId" 
+             [(ngModel)]="selectedElementTypes"
              [multiple]="true"
              [hideSelected]="true">
     </ng-select>

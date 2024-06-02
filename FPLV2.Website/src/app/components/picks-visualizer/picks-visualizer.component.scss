@@ -18,7 +18,7 @@
 }
 
 dialog {
-    padding: 1rem 3rem;
+    padding: 5px;
 	background: #333;
     color: white;
 	border-radius: 20px;
@@ -42,7 +42,6 @@ dialog {
         background: transparent;
         border: none;
 		position: absolute;
-		top: 15px;
 		right: 10px;
 		transition: ease filter, transform 0.3s;
 		cursor: pointer;

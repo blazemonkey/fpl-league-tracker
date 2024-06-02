@@ -52,7 +52,8 @@ public class PointsChartGroupedData
 {
     public int Id { get; set; }
     public int TeamCode { get; set; }
-    public int ElementType { get; set; }
+    public int ElementTypeId { get; set; }
+    public string ElementTypeText { get; set; }
     public string FirstName { get; set; }
     public string SecondName { get; set; }
     public string WebName { get; set; }
@@ -72,15 +73,15 @@ public class PointsChartOptions
     /// <summary>
     /// Gets or sets if only captain picks are shown
     /// </summary>
-    public bool ShowCaptainsOnly { get; set; }    
+    public bool ShowCaptainsOnly { get; set; }
     /// <summary>
-    /// Gets or sets the element type to filter by
+    /// Gets or sets the element types to filter by
     /// </summary>
-    public int ElementType { get; set; }
+    public int[] ElementTypes { get; set; }
     /// <summary>
     /// Gets or sets the ids of the players to show
     /// </summary>
-    public int[] PlayerIds { get; set; } = new int[] { };
+    public int[] PlayerIds { get; set; }
 }
 
 public class PointsChartValueData

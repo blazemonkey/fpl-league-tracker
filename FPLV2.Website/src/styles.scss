@@ -76,7 +76,7 @@ select {
 ng-select {
     background-color: grey;
     border-radius: 5px;
-    padding: 5px;
+    padding: 10px;
     font-size: 0.8rem;
 
     .ng-select-container {
@@ -86,12 +86,16 @@ ng-select {
             font-weight: bold;
             border-radius: 10px;
             padding: 5px;
-            margin: 5px;
+            margin: 0px 5px;
             background-color: whitesmoke;
             color: black;
 
             .ng-value-icon.left {
                 padding: 5px;
+            }
+
+            .ng-value-label {
+                padding: 0px 5px 0px 0px;
             }
         }
 
