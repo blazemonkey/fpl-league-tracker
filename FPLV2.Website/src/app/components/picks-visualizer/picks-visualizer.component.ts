@@ -20,6 +20,8 @@ export class PicksVisualizerComponent {
   filteredPlayers: any[] = [];
   selectedElementTypes: number[] | undefined;
   filteredElementTypes: any[] = [];
+  showCaptainsOnly: boolean = false;
+  ignoreElementsWithNoPicks: boolean = false;
 
   columns: any[] = [ 
     { headerName: '', field: 'image', width: 40, cellRendererSelector: () => { return { component: TeamRenderer }; }, pinned: 'left' },
@@ -69,8 +71,8 @@ export class PicksVisualizerComponent {
 
   getPicks() {
     var options = {
-      IgnoreElementsWithNoPicks: false,
-      ShowCaptainsOnly: false,
+      IgnoreElementsWithNoPicks: this.ignoreElementsWithNoPicks,
+      ShowCaptainsOnly: this.showCaptainsOnly,
       PlayerIds: this.selectedPlayers,
       ElementTypes: this.selectedElementTypes
     }
