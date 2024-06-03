@@ -16,7 +16,7 @@
 <dialog #filterDialog>
   <button (click)="closeFilterDialog(false)" aria-label="close" class="x">❌</button>
   <div class="option">
-    <h5>Players</h5>
+    <h5>Teams</h5>
     <ng-select [items]="filteredPlayers" 
              bindLabel="teamName" 
              bindValue="id" 
@@ -34,6 +34,17 @@
              [multiple]="true"
              [hideSelected]="true">
     </ng-select>
+  </div>
+  <div class="option">
+    <h5>Options</h5>
+    <div class="filter-option">
+      <input type="checkbox" [(ngModel)]="showCaptainsOnly"/>
+      <div>Show captain picks only</div>
+    </div>
+    <div class="filter-option">
+      <input type="checkbox" [(ngModel)]="ignoreElementsWithNoPicks"/>
+      <div>Hide players with no picks</div>
+    </div>    
   </div>
   <div class="controls">
     <button (click)="closeFilterDialog(true)">Apply</button>
