@@ -20,6 +20,8 @@ export class PicksVisualizerComponent {
   filteredPlayers: any[] = [];
   selectedElementTypes: number[] | undefined;
   filteredElementTypes: any[] = [];
+  selectedTeam: number | undefined;
+  filteredTeams: any[] = [];
   showCaptainsOnly: boolean = false;
   ignoreElementsWithNoPicks: boolean = false;
 
@@ -58,6 +60,10 @@ export class PicksVisualizerComponent {
 
         this.filteredPlayers = this.players.sort((a, b) => a.teamName.localeCompare(b.teamName));
         this.selectedPlayers = this.filteredPlayers.map(x => x.id);              
+    
+        this.teams.unshift({ code: 0, name: 'All' });
+        this.filteredTeams = this.teams;
+        this.selectedTeam = 0;
 
         this.fullScreen = true;
         this.getPicks();
@@ -74,7 +80,8 @@ export class PicksVisualizerComponent {
       IgnoreElementsWithNoPicks: this.ignoreElementsWithNoPicks,
       ShowCaptainsOnly: this.showCaptainsOnly,
       PlayerIds: this.selectedPlayers,
-      ElementTypes: this.selectedElementTypes
+      ElementTypes: this.selectedElementTypes,
+      TeamId: this.selectedTeam
     }
 
     this.httpService.getPicks(this.seasonId, this.leagueId, options).subscribe({ 
