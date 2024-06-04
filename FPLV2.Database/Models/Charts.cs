@@ -82,6 +82,10 @@ public class PointsChartOptions
     /// Gets or sets the ids of the players to show
     /// </summary>
     public int[] PlayerIds { get; set; }
+    /// <summary>
+    /// Gets or sets the id of the team to filter by
+    /// </summary>
+    public int TeamId { get; set; }
 }
 
 public class PointsChartValueData

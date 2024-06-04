@@ -28,7 +28,7 @@
             </div>
             <div class="expand" (click)="expandStats()">Full Screen &#x26F6;</div>
         </div>
-        <app-stat-table id="stats-table" *ngIf="this.selectedStat" 
+        <app-stat-table id="stats-table" *ngIf="this.selectedStat && this.selectedPlayer" 
             [type]="this.selectedStat.type" 
             [statId]="this.selectedStat.id" 
             [seasonId]="this.seasonId" 

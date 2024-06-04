@@ -124,6 +124,9 @@ public class ChartRepository : BaseRepository, IChartRepository
             Values = e.Select(item => new PointsChartValueData { Gameweek = item.Gameweek, Points = item.TotalPoints, Picks = item.Picks }).ToList()
         }).ToArray();
 
+        if (options.TeamId > 0)
+            result = result.Where(x => x.TeamCode == options.TeamId).ToArray();
+
         if (options.IgnoreElementsWithNoPicks || options.ShowCaptainsOnly)
             result = result.Where(x => x.Values.Any(z => z.Picks.Any())).ToArray();
 
