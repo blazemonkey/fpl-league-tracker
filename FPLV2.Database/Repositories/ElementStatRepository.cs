@@ -30,7 +30,7 @@ public class ElementStatRepository : BaseRepository, IElementStatRepository
 
     public async Task<int> GetLatestGameweekBySeasonId(int seasonId)
     {
-        var sql = "select max(es.gameweek) from elements_stats es join elements e on es.ApiElementId = e.Id join teams t on t.Id = e.TeamId join seasons s on s.Id = t.SeasonId where s.Id = @SeasonId";
+        var sql = "select max(es.gameweek) from elements_stats es join elements e on es.ElementId = e.Id join teams t on t.Id = e.TeamId join seasons s on s.Id = t.SeasonId where s.Id = @SeasonId";
         using var conn = await OpenConnection();
         var result = await conn.QuerySingleOrDefaultAsync<int?>(sql, new { SeasonId = seasonId }) ?? 1; // gameweek 1 is by default the first one we want
         return result;
